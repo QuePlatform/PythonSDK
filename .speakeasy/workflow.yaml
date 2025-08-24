@@ -1,0 +1,19 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    Que API:
+        inputs:
+            - location: ../../Website/openapi.yaml
+        output: .speakeasy/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/que-cr2/que/que-api
+targets:
+    que:
+        target: python
+        source: Que API
+        codeSamples:
+            registry:
+                location: registry.speakeasyapi.dev/que-cr2/que/que-api-python-code-samples
+            labelOverride:
+                fixedValue: Python (SDK)
+            blocking: false
