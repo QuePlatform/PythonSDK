@@ -1,0 +1,673 @@
+openapi: "3.0.3"
+info:
+  title: Que API
+  version: "1.0.0"
+  description: |
+    Welcome to the Que Public HTTP API. Our platform provides robust tools for working with C2PA (Coalition for Content Provenance and Authenticity) manifests, enabling you to sign and verify digital assets to ensure their authenticity and provenance.
+
+    **Key Features:**
+    *   **Verify**: Inspect and validate C2PA manifests embedded in assets.
+    *   **Sign**: Embed C2PA manifests into your assets with a server-side signature.
+    *   **Trust Management**: Retrieve the current C2PA trust list.
+
+    **Authentication:**
+    All endpoints (except for `/healthz`) are secured and require an API key to be passed in the `x-api-key` header.
+
+    Usage of this API is tracked via Firehose for billing and monitoring purposes.
+  contact:
+    name: Que API Support
+    url: "https://addque.org/support"
+    email: "support@addque.org"
+  termsOfService: "https://addque.org/terms"
+
+servers:
+  - url: "https://{environment}.addque.org/"
+    description: The main API server for Que.
+    variables:
+      environment:
+        default: dev-api
+        description: The deployment environment.
+
+tags:
+  - name: Asset Management
+    description: Helper endpoints for handling asset uploads.
+  - name: Utility
+    description: Service-level endpoints for health checks and configuration.
+
+externalDocs:
+  description: Find more detailed documentation and tutorials here.
+  url: "https://docs.addque.org"
+
+components:
+  #-------------------------------------------------
+  # Reusable Responses (Errors)
+  #-------------------------------------------------
+  responses:
+    BadRequest:
+      description: Bad Request. The request was malformed or invalid.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "bad_request"
+            status: 400
+            code: "bad_request"
+            detail: "manifest_json is required when mode=server_measure"
+
+    Unauthorized:
+      description: Unauthorized. Missing or invalid API key.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "unauthorized"
+            status: 401
+            code: "unauthorized"
+            detail: "invalid API key"
+
+    Forbidden:
+      description: Forbidden. The client does not have permission to access this resource.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "forbidden"
+            status: 403
+            code: "forbidden"
+            detail: "you do not have permission to perform this action"
+
+    NotFound:
+      description: Not Found. The requested resource does not exist.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "not_found"
+            status: 404
+            code: "not_found"
+            detail: "resource not found"
+
+    UnprocessableEntity:
+      description: Unprocessable Entity. The request was valid but could not be processed (e.g., C2PA verification failed).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          examples:
+            verification_failed:
+              summary: Verification failed
+              value:
+                type: "about:blank"
+                title: "verification failed"
+                status: 422
+                code: "engine_verification"
+                detail: "verification failed"
+            c2pa_error:
+              summary: C2PA processing error
+              value:
+                type: "about:blank"
+                title: "root operation failed"
+                status: 422
+                code: "engine_c2pa"
+                detail: "c2pa: unsupported manifest format"
+
+    RateLimited:
+      description: Too Many Requests. The client has exceeded the allowed request rate.
+      headers:
+        Retry-After:
+          description: Number of seconds to wait before retrying.
+          schema:
+            type: integer
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "rate_limited"
+            status: 429
+            code: "rate_limited"
+            detail: "try again in 5000 ms"
+            details:
+              try_again_in_ms: 5000
+
+    InternalServerError:
+      description: Internal Server Error. An unexpected error occurred.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "internal_error"
+            status: 500
+            code: "internal_error"
+            detail: "unexpected panic in verification engine"
+
+    NotImplemented:
+      description: Not Implemented. The requested feature is not available.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "not_implemented"
+            status: 501
+            code: "not_implemented"
+            detail: "client_hash signing mode is not yet supported"
+
+    ServiceUnavailable:
+      description: Service Unavailable. The server is temporarily unable to handle the request.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "service_unavailable"
+            status: 503
+            code: "service_unavailable"
+            detail: "storage backend unavailable"
+
+    Timeout:
+      description: Gateway Timeout. The server did not receive a timely response from an upstream service.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemResponse'
+          example:
+            type: "about:blank"
+            title: "timeout"
+            status: 504
+            code: "timeout"
+            detail: "request timed out"
+  #-------------------------------------------------
+  # Security
+  #-------------------------------------------------
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API Key provided by Que. Obtain your key from the developer dashboard.
+
+  #-------------------------------------------------
+  # Schemas
+  #-------------------------------------------------
+  schemas:
+    ProblemResponse:
+      type: object
+      description: An RFC 7807 problem details response.
+      properties:
+        type:
+          type: string
+          example: "about:blank"
+        title:
+          type: string
+          example: "rate_limited"
+        status:
+          type: integer
+          example: 429
+        code:
+          type: string
+          example: "rate_limited"
+        detail:
+          type: string
+          nullable: true
+          example: "try again in 5000 ms"
+        details:
+          type: object
+          nullable: true
+          example:
+            try_again_in_ms: 5000
+      required:
+        - type
+        - title
+        - status
+        - code
+
+    HealthzResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: healthy
+        message:
+          type: string
+          example: "Que API is running"
+        timestamp:
+          type: integer
+          format: int64
+          description: The Unix epoch timestamp when the health check was performed.
+          example: 1755802800
+      required:
+        - status
+        - message
+        - timestamp
+
+    # ----- AssetRefDto variants -----
+    AssetRefDto:
+      description: A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object.
+      oneOf:
+        - $ref: "#/components/schemas/BytesBase64"
+        - $ref: "#/components/schemas/PresignedUrl"
+        - $ref: "#/components/schemas/S3"
+
+    BytesBase64:
+      type: object
+      description: An asset provided as a Base64-encoded string. Suitable for small files.
+      properties:
+        b64:
+          type: string
+          description: The raw bytes of the asset, encoded in Base64.
+          example: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+      required:
+        - b64
+
+    PresignedUrl:
+      type: object
+      description: An asset located at a publicly accessible or presigned URL.
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL where the asset can be downloaded.
+          example: "https://my-public-bucket.s3.amazonaws.com/assets/image.jpg?AWSAccessKeyId=..."
+      required:
+        - url
+
+    S3:
+      type: object
+      description: An asset located in an S3 bucket that the Que service has access to.
+      properties:
+        bucket:
+          type: string
+          description: The name of the S3 bucket.
+          example: "Que-customer-assets"
+        key:
+          type: string
+          description: The object key (path) within the S3 bucket.
+          example: "uploads/user123/original.png"
+      required:
+        - bucket
+        - key
+
+    # ----- /v1/verify -----
+    VerifyRequest:
+      type: object
+      properties:
+        asset:
+          $ref: "#/components/schemas/AssetRefDto"
+        mode:
+          type: string
+          default: "summary"
+          enum:
+            - info
+            - detailed
+            - tree
+            - summary
+          description: |
+            The level of detail to return in the verification report.
+            * `summary`: A high-level pass/fail result. Fastest option.
+            * `info`: Basic information about the manifest and its claims.
+            * `detailed`: In-depth details of all assertions and claims.
+            * `tree`: A hierarchical view of the manifest's ingredient relationships.
+      required:
+        - asset
+      example:
+        asset:
+          url: "https://example.com/images/provenance-image.jpg"
+        mode: "detailed"
+
+    VerifyResponse:
+      type: object
+      properties:
+        report:
+          $ref: "#/components/schemas/VerificationReport"
+      required:
+        - report
+    VerificationReport:
+      type: object
+      properties:
+        validationStatus:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+              explanation:
+                type: string
+        summary:
+          type: object
+          properties:
+            isTrusted:
+              type: boolean
+            signer:
+              type: string
+      additionalProperties: true
+      example:
+        report:
+          validationStatus:
+            - code: "claim.signature.validated"
+              explanation: "Claim signature validated"
+          summary:
+            isTrusted: true
+            signer: "CN=Que Signing Service"
+
+    # ----- /v1/sign -----
+    SignRequest:
+      type: object
+      properties:
+        asset:
+          $ref: "#/components/schemas/AssetRefDto"
+        mode:
+          type: string
+          enum:
+            - server_measure
+            - client_hash
+          description: |
+            The signing mode to use.
+            * `server_measure`: The server will download the asset, calculate its hash, and embed the manifest. Requires `manifest_json`.
+            * `client_hash`: The client provides the asset hash directly. (Not yet implemented).
+          deprecated: true
+        manifest_json:
+          type: object
+          description: The C2PA manifest to embed in the asset. This is required when `mode` is `server_measure`.
+      required:
+        - asset
+        - mode
+      example:
+        asset:
+          b64: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+        mode: "server_measure"
+        manifest_json:
+          alg: "ps256"
+          ta_url: "http://timestamp.digicert.com"
+          assertions:
+            - label: "stds.schema-org.CreativeWork"
+              data:
+                "@context": "https://schema.org"
+                "@type": "CreativeWork"
+                "author":
+                  - "@type": "Person"
+                    "name": "John Doe"
+
+    SignResponse:
+      type: object
+      description: The result of a successful signing operation, including the signed asset.
+      properties:
+        assurance:
+          type: string
+          description: The level of assurance provided by the signing process.
+          example: "server_measured"
+        evidence:
+          type: object
+          description: Metadata about the signature that was applied.
+          example:
+            signer: "env_dev"
+            alg: "ES256"
+        asset_b64:
+          type: string
+          nullable: true
+          description: The Base64-encoded signed asset. This field is populated if the resulting asset is 3MB or less. If larger, this will be null.
+        asset_s3_uri:
+          type: string
+          nullable: true
+          description: An S3 URI for the signed asset. This field is populated if the resulting asset is larger than 3MB. If the asset is inlined in `asset_b64`, this will be null.
+          example: "s3://Que-signed-assets/a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8/signed.jpg"
+      required:
+        - assurance
+        - evidence
+
+    # ----- /v1/assets/presign -----
+    PresignResponse:
+      type: object
+      description: A presigned URL that can be used for a temporary, authenticated upload to S3.
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The presigned S3 URL to which the client should PUT the asset file.
+          example: "https://Que-customer-uploads.s3.amazonaws.com/new-asset-key?AWSAccessKeyId=..."
+        key:
+          type: string
+          description: The S3 object key that the asset will have after being uploaded. This key should be used in subsequent API calls.
+          example: "uploads/user123/timestamp/asset.jpg"
+      required:
+        - url
+        - key
+
+    # ----- /v1/trust-list -----
+    TrustListResponse:
+      type: object
+      description: The C2PA trust list bundle, containing trusted certificate authorities and manufacturers.
+      properties:
+        version:
+          type: string
+          example: "dev-1"
+        issued_at:
+          type: string
+          format: date-time
+          example: "2025-08-15T20:00:00Z"
+        data:
+          type: object
+          properties:
+            manufacturers:
+              type: array
+              items:
+                type: string
+            cas:
+              type: array
+              items:
+                type: string
+                description: A trusted CA certificate in PEM format.
+            policy:
+              type: object
+              properties:
+                default:
+                  type: string
+              required:
+                - default
+          required:
+            - manufacturers
+            - cas
+            - policy
+      required:
+        - version
+        - issued_at
+        - data
+      example:
+        version: "prod-2025-08-15"
+        issued_at: "2025-08-15T20:00:00Z"
+        data:
+          manufacturers:
+            - "Example Camera Corp"
+          cas:
+            - "-----BEGIN CERTIFICATE-----\nMIID...=\n-----END CERTIFICATE-----"
+          policy:
+            default: "allow"
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /healthz:
+    get:
+      tags:
+        - Utility
+      summary: Service Health Check
+      description: Performs a basic health check of the API service. This endpoint does not require authentication and is typically used by monitoring systems.
+      operationId: getHealthCheck
+      responses:
+        '200':
+          description: Service is healthy and operational.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthzResponse"
+
+  /v1/verify:
+    post:
+      summary: Verify the C2PA manifest of an asset
+      description: Analyzes a digital asset (e.g., an image) to find, validate, and report on any embedded C2PA manifests. This allows you to confirm the asset's provenance and authenticity.
+      operationId: verifyAsset
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        description: The asset to verify and the desired report detail level.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyRequest"
+      responses:
+        '200':
+          description: Verification report successfully generated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifyResponse"
+              example:
+                report:
+                  validationStatus:
+                    - code: "claim.signature.validated"
+                      explanation: "Claim signature validated"
+                  summary:
+                    isTrusted: true
+                    signer: "CN=Que Signing Service"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          description: Verification failed due to invalid or untrusted manifest.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+              example:
+                type: "about:blank"
+                title: "verification failed"
+                status: 422
+                code: "engine_verification"
+                detail: "verification failed"
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /v1/sign:
+    post:
+      summary: Sign an asset with a C2PA manifest
+      description: Embeds a C2PA manifest into a digital asset and signs it using a server-side key. This cryptographically links the asset to its provenance information.
+      operationId: signAsset
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        description: The asset to sign, the signing mode, and the C2PA manifest content.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignRequest"
+      responses:
+        '200':
+          description: The asset was successfully signed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SignResponse"
+              example:
+                assurance: "server_measured"
+                evidence:
+                  signer: "env_dev"
+                  alg: "ES256"
+                asset_b64: null
+                asset_s3_uri: "s3://Que-signed-assets/uuid/signed.jpg"
+        '400':
+          description: Bad request due to invalid input.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemResponse'
+              example:
+                type: "about:blank"
+                title: "bad_request"
+                status: 400
+                code: "bad_request"
+                detail: "manifest_json is required when mode=server_measure"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /v1/assets/presign:
+    post:
+      tags:
+        - Asset Management
+      summary: Get an S3 presigned URL for uploads
+      description: Generates a temporary, secure URL that a client can use to upload a large asset directly to S3. This is the recommended workflow for assets larger than a few megabytes to avoid sending large payloads through the API server.
+      operationId: getPresignedUrl
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A presigned URL and object key were successfully generated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PresignResponse"
+              example:
+                url: "https://que-customer-uploads.s3.amazonaws.com/new-asset-key?AWSAccessKeyId=..."
+                key: "uploads/user123/timestamp/asset.jpg"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /v1/trust-list:
+    get:
+      tags:
+        - Utility
+      summary: Retrieve the current C2PA trust bundle
+      description: Fetches the latest C2PA trust list, which includes trusted certificate authorities and hardware manufacturers. This list is used by verifiers to determine if a signature on a manifest is from a trusted source.
+      operationId: getTrustList
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: The current C2PA trust list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrustListResponse"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalServerError'

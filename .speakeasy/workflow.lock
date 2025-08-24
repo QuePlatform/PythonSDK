@@ -1,0 +1,37 @@
+speakeasyVersion: 1.606.3
+sources:
+    Que API:
+        sourceNamespace: que-api
+        sourceRevisionDigest: sha256:8d011d455ba3d4da5196eda0e3d524ecfe52d75c3419f2f065cd90d81f1dc49f
+        sourceBlobDigest: sha256:3c1e48a67c019faed5972f2105b937c1b026076b5927621db38e3967ce5a7385
+        tags:
+            - latest
+            - 1.0.0
+targets:
+    que:
+        source: Que API
+        sourceNamespace: que-api
+        sourceRevisionDigest: sha256:8d011d455ba3d4da5196eda0e3d524ecfe52d75c3419f2f065cd90d81f1dc49f
+        sourceBlobDigest: sha256:3c1e48a67c019faed5972f2105b937c1b026076b5927621db38e3967ce5a7385
+        codeSamplesNamespace: que-api-python-code-samples
+        codeSamplesRevisionDigest: sha256:df79ab3d84facb1590b1bd6da94b3224467583fbf0c802359304b7a8788f38ae
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        Que API:
+            inputs:
+                - location: openapi.yaml
+            output: .speakeasy/out.openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/que-cr2/que/que-api
+    targets:
+        que:
+            target: python
+            source: Que API
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/que-cr2/que/que-api-python-code-samples
+                labelOverride:
+                    fixedValue: Python (SDK)
+                blocking: false

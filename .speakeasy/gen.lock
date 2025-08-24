@@ -1,0 +1,184 @@
+lockVersion: 2.0.0
+id: a559c4f4-5ced-4888-977e-9da6df24ea1e
+management:
+  docChecksum: 1b6f1e0e724a103c5bafac828edf515a
+  docVersion: 1.0.0
+  speakeasyVersion: 1.606.3
+  generationVersion: 2.687.1
+  releaseVersion: 0.0.2
+  configChecksum: 3cb87fb1854fe2e2685bcb6699703b19
+features:
+  python:
+    additionalDependencies: 1.0.0
+    additionalProperties: 1.0.1
+    constsAndDefaults: 1.0.5
+    core: 5.19.9
+    defaultEnabledRetries: 0.2.0
+    deprecations: 3.0.2
+    devContainers: 3.0.0
+    enumUnions: 0.1.0
+    envVarSecurityUsage: 0.3.2
+    flatRequests: 1.0.1
+    globalSecurity: 3.0.3
+    globalSecurityCallbacks: 1.0.0
+    globalSecurityFlattening: 1.0.0
+    globalServerURLs: 3.1.1
+    methodArguments: 1.0.2
+    nullables: 1.0.1
+    responseFormat: 1.0.1
+    retries: 3.0.2
+    sdkHooks: 1.1.0
+    unions: 3.0.4
+generatedFiles:
+  - .devcontainer/README.md
+  - .devcontainer/devcontainer.json
+  - .devcontainer/setup.sh
+  - .gitattributes
+  - .vscode/settings.json
+  - USAGE.md
+  - docs/errors/problemresponseerror.md
+  - docs/models/assetrefdto.md
+  - docs/models/bytesbase64.md
+  - docs/models/data.md
+  - docs/models/details.md
+  - docs/models/evidence.md
+  - docs/models/getpresignedurlresponse.md
+  - docs/models/gettrustlistresponse.md
+  - docs/models/healthzresponse.md
+  - docs/models/manifestjson.md
+  - docs/models/policy.md
+  - docs/models/presignedurl.md
+  - docs/models/presignresponse.md
+  - docs/models/s3.md
+  - docs/models/security.md
+  - docs/models/signassetresponse.md
+  - docs/models/signrequest.md
+  - docs/models/signrequestmode.md
+  - docs/models/signresponse.md
+  - docs/models/summary.md
+  - docs/models/trustlistresponse.md
+  - docs/models/utils/retryconfig.md
+  - docs/models/validationstatus.md
+  - docs/models/verificationreport.md
+  - docs/models/verifyassetresponse.md
+  - docs/models/verifyrequest.md
+  - docs/models/verifyrequestmode.md
+  - docs/models/verifyresponse.md
+  - docs/sdks/assetmanagement/README.md
+  - docs/sdks/que/README.md
+  - docs/sdks/utility/README.md
+  - py.typed
+  - pylintrc
+  - pyproject.toml
+  - scripts/publish.sh
+  - src/que_media/__init__.py
+  - src/que_media/_hooks/__init__.py
+  - src/que_media/_hooks/sdkhooks.py
+  - src/que_media/_hooks/types.py
+  - src/que_media/_version.py
+  - src/que_media/asset_management.py
+  - src/que_media/basesdk.py
+  - src/que_media/errors/__init__.py
+  - src/que_media/errors/no_response_error.py
+  - src/que_media/errors/problemresponse_error.py
+  - src/que_media/errors/quedefaulterror.py
+  - src/que_media/errors/queerror.py
+  - src/que_media/errors/responsevalidationerror.py
+  - src/que_media/httpclient.py
+  - src/que_media/models/__init__.py
+  - src/que_media/models/assetrefdto.py
+  - src/que_media/models/bytesbase64.py
+  - src/que_media/models/getpresignedurlop.py
+  - src/que_media/models/gettrustlistop.py
+  - src/que_media/models/healthzresponse.py
+  - src/que_media/models/presignedurl.py
+  - src/que_media/models/presignresponse.py
+  - src/que_media/models/problemresponse_error.py
+  - src/que_media/models/s3.py
+  - src/que_media/models/security.py
+  - src/que_media/models/signassetop.py
+  - src/que_media/models/signrequest.py
+  - src/que_media/models/signresponse.py
+  - src/que_media/models/trustlistresponse.py
+  - src/que_media/models/verificationreport.py
+  - src/que_media/models/verifyassetop.py
+  - src/que_media/models/verifyrequest.py
+  - src/que_media/models/verifyresponse.py
+  - src/que_media/py.typed
+  - src/que_media/sdk.py
+  - src/que_media/sdkconfiguration.py
+  - src/que_media/types/__init__.py
+  - src/que_media/types/basemodel.py
+  - src/que_media/utility.py
+  - src/que_media/utils/__init__.py
+  - src/que_media/utils/annotations.py
+  - src/que_media/utils/datetimes.py
+  - src/que_media/utils/enums.py
+  - src/que_media/utils/eventstreaming.py
+  - src/que_media/utils/forms.py
+  - src/que_media/utils/headers.py
+  - src/que_media/utils/logger.py
+  - src/que_media/utils/metadata.py
+  - src/que_media/utils/queryparams.py
+  - src/que_media/utils/requestbodies.py
+  - src/que_media/utils/retries.py
+  - src/que_media/utils/security.py
+  - src/que_media/utils/serializers.py
+  - src/que_media/utils/unmarshal_json_response.py
+  - src/que_media/utils/url.py
+  - src/que_media/utils/values.py
+examples:
+  verifyAsset:
+    speakeasy-default-verify-asset:
+      requestBody:
+        application/json: {"asset": {"url": "https://example.com/images/provenance-image.jpg"}, "mode": "detailed"}
+      responses:
+        "200":
+          application/json: {"report": {"report": {"validationStatus": [{"code": "claim.signature.validated", "explanation": "Claim signature validated"}], "summary": {"isTrusted": true, "signer": "CN=Que Signing Service"}}}}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+  signAsset:
+    speakeasy-default-sign-asset:
+      requestBody:
+        application/json: {"asset": {"b64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="}, "mode": "server_measure", "manifest_json": {}}
+      responses:
+        "200":
+          application/json: {"assurance": "server_measured", "evidence": {}, "asset_s3_uri": "s3://Que-signed-assets/a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8/signed.jpg"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+  getHealthCheck:
+    speakeasy-default-get-health-check:
+      responses:
+        "200":
+          application/json: {"status": "healthy", "message": "Que API is running", "timestamp": 1755802800}
+  getTrustList:
+    speakeasy-default-get-trust-list:
+      responses:
+        "200":
+          application/json: {"version": "prod-2025-08-15", "issued_at": "2025-08-15T20:00:00Z", "data": {"manufacturers": ["Example Camera Corp"], "cas": ["-----BEGIN CERTIFICATE-----\nMIID...=\n-----END CERTIFICATE-----"], "policy": {"default": "allow"}}}
+        "401":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+  getPresignedUrl:
+    speakeasy-default-get-presigned-url:
+      responses:
+        "200":
+          application/json: {"url": "https://Que-customer-uploads.s3.amazonaws.com/new-asset-key?AWSAccessKeyId=...", "key": "uploads/user123/timestamp/asset.jpg"}
+        "401":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+examplesVersion: 1.0.2
