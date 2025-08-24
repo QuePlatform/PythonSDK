@@ -3,7 +3,7 @@ speakeasyVersion: latest
 sources:
     Que API:
         inputs:
-            - location: ../../Website/openapi.yaml
+            - location: openapi.yaml
         output: .speakeasy/out.openapi.yaml
         registry:
             location: registry.speakeasyapi.dev/que-cr2/que/que-api
