@@ -7,11 +7,20 @@ Helper endpoints for handling asset uploads.
 
 ### Available Operations
 
-* [get_presigned_url](#get_presigned_url) - Get an S3 presigned URL for uploads
+* [get_presigned_url](#get_presigned_url) - Get an S3 presigned URL for secure uploads
 
 ## get_presigned_url
 
-Generates a temporary, secure URL that a client can use to upload a large asset directly to S3. This is the recommended workflow for assets larger than a few megabytes to avoid sending large payloads through the API server.
+Generates a temporary, cryptographically signed URL that allows secure direct upload of assets to S3 without exposing AWS credentials.
+
+This is the recommended approach for uploading assets, especially large files, as it:
+- Avoids sending large payloads through the API server
+- Provides secure, time-limited access to S3
+- Enables resumable uploads for better reliability
+- Reduces API server memory usage and network overhead
+
+Use the returned URL to make a PUT request with your asset file, then use the returned key for subsequent sign/verify operations.
+
 
 ### Example Usage
 

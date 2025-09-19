@@ -12,6 +12,7 @@ from que_media._hooks import HookContext, SDKHooks
 from que_media.types import OptionalNullable, UNSET
 from que_media.utils import get_security_from_env
 from que_media.utils.unmarshal_json_response import unmarshal_json_response
+import sys
 from typing import (
     Any,
     Callable,
@@ -31,15 +32,22 @@ if TYPE_CHECKING:
 
 
 class Que(BaseSDK):
-    r"""Que API: Welcome to the Que Public HTTP API. Our platform provides robust tools for working with C2PA (Coalition for Content Provenance and Authenticity) manifests, enabling you to sign and verify digital assets to ensure their authenticity and provenance.
+    r"""Que API: Welcome to the Que Public HTTP API for C2PA (Content Authenticity Initiative) provenance management.
+
+    Our platform provides robust tools for working with digital asset provenance through C2PA manifests, enabling you to sign and verify digital assets to ensure their authenticity, origin, and processing history.
 
     **Key Features:**
-    *   **Verify**: Inspect and validate C2PA manifests embedded in assets.
-    *   **Sign**: Embed C2PA manifests into your assets with a server-side signature.
-    *   **Trust Management**: Retrieve the current C2PA trust list.
+    *   **Memory-Efficient Streaming**: Assets are processed using streaming techniques to minimize memory usage, supporting large files efficiently
+    *   **Verify**: Inspect and validate C2PA manifests embedded in assets with multiple detail levels
+    *   **Sign**: Embed comprehensive C2PA manifests into your assets with server-side cryptographic signatures
+    *   **Trust Management**: Retrieve and validate against current trust lists containing trusted certificate authorities and manufacturers
+    *   **Secure Uploads**: Direct-to-S3 uploads via presigned URLs for large assets
 
     **Authentication:**
     All endpoints (except for `/healthz`) are secured and require an API key to be passed in the `x-api-key` header.
+
+    **Processing Architecture:**
+    Assets are streamed from S3 or URLs to temporary storage during processing to ensure O(chunk_size) memory usage instead of O(file_size), enabling efficient handling of large files on containerized platforms.
 
     Usage of this API is tracked via Firehose for billing and monitoring purposes.
 
@@ -134,6 +142,7 @@ class Que(BaseSDK):
                 timeout_ms=timeout_ms,
                 debug_logger=debug_logger,
             ),
+            parent_ref=self,
         )
 
         hooks = SDKHooks()
@@ -153,13 +162,24 @@ class Que(BaseSDK):
             self.sdk_configuration.async_client_supplied,
         )
 
+    def dynamic_import(self, modname, retries=3):
+        for attempt in range(retries):
+            try:
+                return importlib.import_module(modname)
+            except KeyError:
+                # Clear any half-initialized module and retry
+                sys.modules.pop(modname, None)
+                if attempt == retries - 1:
+                    break
+        raise KeyError(f"Failed to import module '{modname}' after {retries} attempts")
+
     def __getattr__(self, name: str):
         if name in self._sub_sdk_map:
             module_path, class_name = self._sub_sdk_map[name]
             try:
-                module = importlib.import_module(module_path)
+                module = self.dynamic_import(module_path)
                 klass = getattr(module, class_name)
-                instance = klass(self.sdk_configuration)
+                instance = klass(self.sdk_configuration, parent_ref=self)
                 setattr(self, name, instance)
                 return instance
             except ImportError as e:
@@ -206,7 +226,14 @@ class Que(BaseSDK):
         self,
         *,
         asset: Union[models.AssetRefDto, models.AssetRefDtoTypedDict],
-        mode: Optional[models.VerifyRequestMode] = models.VerifyRequestMode.SUMMARY,
+        mode: Optional[str] = "summary",
+        allow_remote_manifests: Optional[bool] = False,
+        allow_insecure_remote_http: Optional[bool] = False,
+        include_certificates: Optional[bool] = False,
+        cawg: Optional[
+            Union[models.CawgVerifyDto, models.CawgVerifyDtoTypedDict]
+        ] = None,
+        limits: Optional[Union[models.LimitsDto, models.LimitsDtoTypedDict]] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
         timeout_ms: Optional[int] = None,
@@ -214,10 +241,18 @@ class Que(BaseSDK):
     ) -> models.VerifyAssetResponse:
         r"""Verify the C2PA manifest of an asset
 
-        Analyzes a digital asset (e.g., an image) to find, validate, and report on any embedded C2PA manifests. This allows you to confirm the asset's provenance and authenticity.
+        Analyzes a digital asset to find, validate, and report on any embedded C2PA manifests. This allows you to confirm the asset's provenance, authenticity, and processing history.
 
-        :param asset: A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object.
-        :param mode: The level of detail to return in the verification report. * `summary`: A high-level pass/fail result. Fastest option. * `info`: Basic information about the manifest and its claims. * `detailed`: In-depth details of all assertions and claims. * `tree`: A hierarchical view of the manifest's ingredient relationships.
+        The asset is processed using memory-efficient streaming to temporary storage during verification. Returns detailed validation results including trust status, signer information, and any validation failures.
+
+
+        :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
+        :param mode: The level of detail to return in the verification report. * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation. * `info`: Basic information about the manifest, claims, and signing entities. * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps. * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
+        :param allow_remote_manifests: Whether to allow fetching and validating remote manifests referenced in the asset's C2PA data.
+        :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs when fetching remote manifest resources. Disabled by default for security.
+        :param include_certificates: Whether to include full certificate chains and cryptographic details in the verification report.
+        :param cawg: Options controlling CAWG identity validation behavior during verification.
+        :param limits: Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
         :param timeout_ms: Override the default request timeout configuration for this method in milliseconds
@@ -236,6 +271,11 @@ class Que(BaseSDK):
         request = models.VerifyRequest(
             asset=utils.get_pydantic_model(asset, models.AssetRefDto),
             mode=mode,
+            allow_remote_manifests=allow_remote_manifests,
+            allow_insecure_remote_http=allow_insecure_remote_http,
+            include_certificates=include_certificates,
+            cawg=utils.get_pydantic_model(cawg, Optional[models.CawgVerifyDto]),
+            limits=utils.get_pydantic_model(limits, Optional[models.LimitsDto]),
         )
 
         req = self._build_request(
@@ -316,7 +356,14 @@ class Que(BaseSDK):
         self,
         *,
         asset: Union[models.AssetRefDto, models.AssetRefDtoTypedDict],
-        mode: Optional[models.VerifyRequestMode] = models.VerifyRequestMode.SUMMARY,
+        mode: Optional[str] = "summary",
+        allow_remote_manifests: Optional[bool] = False,
+        allow_insecure_remote_http: Optional[bool] = False,
+        include_certificates: Optional[bool] = False,
+        cawg: Optional[
+            Union[models.CawgVerifyDto, models.CawgVerifyDtoTypedDict]
+        ] = None,
+        limits: Optional[Union[models.LimitsDto, models.LimitsDtoTypedDict]] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
         timeout_ms: Optional[int] = None,
@@ -324,10 +371,18 @@ class Que(BaseSDK):
     ) -> models.VerifyAssetResponse:
         r"""Verify the C2PA manifest of an asset
 
-        Analyzes a digital asset (e.g., an image) to find, validate, and report on any embedded C2PA manifests. This allows you to confirm the asset's provenance and authenticity.
+        Analyzes a digital asset to find, validate, and report on any embedded C2PA manifests. This allows you to confirm the asset's provenance, authenticity, and processing history.
 
-        :param asset: A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object.
-        :param mode: The level of detail to return in the verification report. * `summary`: A high-level pass/fail result. Fastest option. * `info`: Basic information about the manifest and its claims. * `detailed`: In-depth details of all assertions and claims. * `tree`: A hierarchical view of the manifest's ingredient relationships.
+        The asset is processed using memory-efficient streaming to temporary storage during verification. Returns detailed validation results including trust status, signer information, and any validation failures.
+
+
+        :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
+        :param mode: The level of detail to return in the verification report. * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation. * `info`: Basic information about the manifest, claims, and signing entities. * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps. * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
+        :param allow_remote_manifests: Whether to allow fetching and validating remote manifests referenced in the asset's C2PA data.
+        :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs when fetching remote manifest resources. Disabled by default for security.
+        :param include_certificates: Whether to include full certificate chains and cryptographic details in the verification report.
+        :param cawg: Options controlling CAWG identity validation behavior during verification.
+        :param limits: Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
         :param timeout_ms: Override the default request timeout configuration for this method in milliseconds
@@ -346,6 +401,11 @@ class Que(BaseSDK):
         request = models.VerifyRequest(
             asset=utils.get_pydantic_model(asset, models.AssetRefDto),
             mode=mode,
+            allow_remote_manifests=allow_remote_manifests,
+            allow_insecure_remote_http=allow_insecure_remote_http,
+            include_certificates=include_certificates,
+            cawg=utils.get_pydantic_model(cawg, Optional[models.CawgVerifyDto]),
+            limits=utils.get_pydantic_model(limits, Optional[models.LimitsDto]),
         )
 
         req = self._build_request_async(
@@ -426,10 +486,13 @@ class Que(BaseSDK):
         self,
         *,
         asset: Union[models.AssetRefDto, models.AssetRefDtoTypedDict],
-        mode: models.SignRequestMode,
-        manifest_json: Optional[
-            Union[models.ManifestJSON, models.ManifestJSONTypedDict]
+        mode: models.Mode,
+        manifest_json: Optional[str] = None,
+        cawg: Optional[
+            Union[models.CawgIdentityDto, models.CawgIdentityDtoTypedDict]
         ] = None,
+        allow_insecure_remote_http: Optional[bool] = False,
+        limits: Optional[Union[models.LimitsDto, models.LimitsDtoTypedDict]] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
         timeout_ms: Optional[int] = None,
@@ -437,11 +500,17 @@ class Que(BaseSDK):
     ) -> models.SignAssetResponse:
         r"""Sign an asset with a C2PA manifest
 
-        Embeds a C2PA manifest into a digital asset and signs it using a server-side key. This cryptographically links the asset to its provenance information.
+        Embeds a C2PA manifest into a digital asset and signs it using a server-side cryptographic key. The asset is processed using memory-efficient streaming to temporary storage before signing.
 
-        :param asset: A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object.
-        :param mode: The signing mode to use. * `server_measure`: The server will download the asset, calculate its hash, and embed the manifest. Requires `manifest_json`. * `client_hash`: The client provides the asset hash directly. (Not yet implemented).
-        :param manifest_json: The C2PA manifest to embed in the asset. This is required when `mode` is `server_measure`.
+        This operation cryptographically links the asset to its provenance information, creating an immutable record of the asset's origin, authorship, and any processing history.
+
+
+        :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
+        :param mode: The signing mode to use. * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode. * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
+        :param manifest_json: JSON string containing the manifest to embed in the asset as a C2PA claim. This defines the provenance information and assertions about the asset. Required when `mode` is `server_measure`.
+        :param cawg: Configuration to add a CAWG identity assertion during signing. Presence of this object enables CAWG.
+        :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs for remote manifest resources. Disabled by default for security.
+        :param limits: Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
         :param timeout_ms: Override the default request timeout configuration for this method in milliseconds
@@ -460,9 +529,10 @@ class Que(BaseSDK):
         request = models.SignRequest(
             asset=utils.get_pydantic_model(asset, models.AssetRefDto),
             mode=mode,
-            manifest_json=utils.get_pydantic_model(
-                manifest_json, Optional[models.ManifestJSON]
-            ),
+            manifest_json=manifest_json,
+            cawg=utils.get_pydantic_model(cawg, Optional[models.CawgIdentityDto]),
+            allow_insecure_remote_http=allow_insecure_remote_http,
+            limits=utils.get_pydantic_model(limits, Optional[models.LimitsDto]),
         )
 
         req = self._build_request(
@@ -543,10 +613,13 @@ class Que(BaseSDK):
         self,
         *,
         asset: Union[models.AssetRefDto, models.AssetRefDtoTypedDict],
-        mode: models.SignRequestMode,
-        manifest_json: Optional[
-            Union[models.ManifestJSON, models.ManifestJSONTypedDict]
+        mode: models.Mode,
+        manifest_json: Optional[str] = None,
+        cawg: Optional[
+            Union[models.CawgIdentityDto, models.CawgIdentityDtoTypedDict]
         ] = None,
+        allow_insecure_remote_http: Optional[bool] = False,
+        limits: Optional[Union[models.LimitsDto, models.LimitsDtoTypedDict]] = None,
         retries: OptionalNullable[utils.RetryConfig] = UNSET,
         server_url: Optional[str] = None,
         timeout_ms: Optional[int] = None,
@@ -554,11 +627,17 @@ class Que(BaseSDK):
     ) -> models.SignAssetResponse:
         r"""Sign an asset with a C2PA manifest
 
-        Embeds a C2PA manifest into a digital asset and signs it using a server-side key. This cryptographically links the asset to its provenance information.
+        Embeds a C2PA manifest into a digital asset and signs it using a server-side cryptographic key. The asset is processed using memory-efficient streaming to temporary storage before signing.
 
-        :param asset: A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object.
-        :param mode: The signing mode to use. * `server_measure`: The server will download the asset, calculate its hash, and embed the manifest. Requires `manifest_json`. * `client_hash`: The client provides the asset hash directly. (Not yet implemented).
-        :param manifest_json: The C2PA manifest to embed in the asset. This is required when `mode` is `server_measure`.
+        This operation cryptographically links the asset to its provenance information, creating an immutable record of the asset's origin, authorship, and any processing history.
+
+
+        :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
+        :param mode: The signing mode to use. * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode. * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
+        :param manifest_json: JSON string containing the manifest to embed in the asset as a C2PA claim. This defines the provenance information and assertions about the asset. Required when `mode` is `server_measure`.
+        :param cawg: Configuration to add a CAWG identity assertion during signing. Presence of this object enables CAWG.
+        :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs for remote manifest resources. Disabled by default for security.
+        :param limits: Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling.
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
         :param timeout_ms: Override the default request timeout configuration for this method in milliseconds
@@ -577,9 +656,10 @@ class Que(BaseSDK):
         request = models.SignRequest(
             asset=utils.get_pydantic_model(asset, models.AssetRefDto),
             mode=mode,
-            manifest_json=utils.get_pydantic_model(
-                manifest_json, Optional[models.ManifestJSON]
-            ),
+            manifest_json=manifest_json,
+            cawg=utils.get_pydantic_model(cawg, Optional[models.CawgIdentityDto]),
+            allow_insecure_remote_http=allow_insecure_remote_http,
+            limits=utils.get_pydantic_model(limits, Optional[models.LimitsDto]),
         )
 
         req = self._build_request_async(

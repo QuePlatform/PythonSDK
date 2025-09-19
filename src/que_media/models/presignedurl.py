@@ -6,14 +6,14 @@ from typing_extensions import TypedDict
 
 
 class PresignedURLTypedDict(TypedDict):
-    r"""An asset located at a publicly accessible or presigned URL."""
+    r"""An asset accessible via HTTP/HTTPS URL. The URL must be enabled via the ALLOW_URL_ASSETS environment variable. The service will stream the file to temporary storage during processing."""
 
     url: str
-    r"""The URL where the asset can be downloaded."""
+    r"""The HTTP/HTTPS URL of the asset. Must be publicly accessible."""
 
 
 class PresignedURL(BaseModel):
-    r"""An asset located at a publicly accessible or presigned URL."""
+    r"""An asset accessible via HTTP/HTTPS URL. The URL must be enabled via the ALLOW_URL_ASSETS environment variable. The service will stream the file to temporary storage during processing."""
 
     url: str
-    r"""The URL where the asset can be downloaded."""
+    r"""The HTTP/HTTPS URL of the asset. Must be publicly accessible."""

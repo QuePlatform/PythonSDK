@@ -20,9 +20,18 @@ class AssetManagement(BaseSDK):
         timeout_ms: Optional[int] = None,
         http_headers: Optional[Mapping[str, str]] = None,
     ) -> models.GetPresignedURLResponse:
-        r"""Get an S3 presigned URL for uploads
+        r"""Get an S3 presigned URL for secure uploads
 
-        Generates a temporary, secure URL that a client can use to upload a large asset directly to S3. This is the recommended workflow for assets larger than a few megabytes to avoid sending large payloads through the API server.
+        Generates a temporary, cryptographically signed URL that allows secure direct upload of assets to S3 without exposing AWS credentials.
+
+        This is the recommended approach for uploading assets, especially large files, as it:
+        - Avoids sending large payloads through the API server
+        - Provides secure, time-limited access to S3
+        - Enables resumable uploads for better reliability
+        - Reduces API server memory usage and network overhead
+
+        Use the returned URL to make a PUT request with your asset file, then use the returned key for subsequent sign/verify operations.
+
 
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
@@ -115,9 +124,18 @@ class AssetManagement(BaseSDK):
         timeout_ms: Optional[int] = None,
         http_headers: Optional[Mapping[str, str]] = None,
     ) -> models.GetPresignedURLResponse:
-        r"""Get an S3 presigned URL for uploads
+        r"""Get an S3 presigned URL for secure uploads
 
-        Generates a temporary, secure URL that a client can use to upload a large asset directly to S3. This is the recommended workflow for assets larger than a few megabytes to avoid sending large payloads through the API server.
+        Generates a temporary, cryptographically signed URL that allows secure direct upload of assets to S3 without exposing AWS credentials.
+
+        This is the recommended approach for uploading assets, especially large files, as it:
+        - Avoids sending large payloads through the API server
+        - Provides secure, time-limited access to S3
+        - Enables resumable uploads for better reliability
+        - Reduces API server memory usage and network overhead
+
+        Use the returned URL to make a PUT request with your asset file, then use the returned key for subsequent sign/verify operations.
+
 
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method

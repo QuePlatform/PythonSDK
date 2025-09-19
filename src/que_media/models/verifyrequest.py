@@ -2,49 +2,64 @@
 
 from __future__ import annotations
 from .assetrefdto import AssetRefDto, AssetRefDtoTypedDict
-from enum import Enum
+from .cawgverifydto import CawgVerifyDto, CawgVerifyDtoTypedDict
+from .limitsdto import LimitsDto, LimitsDtoTypedDict
 from que_media.types import BaseModel
 from typing import Optional
 from typing_extensions import NotRequired, TypedDict
 
 
-class VerifyRequestMode(str, Enum):
-    r"""The level of detail to return in the verification report.
-    * `summary`: A high-level pass/fail result. Fastest option.
-    * `info`: Basic information about the manifest and its claims.
-    * `detailed`: In-depth details of all assertions and claims.
-    * `tree`: A hierarchical view of the manifest's ingredient relationships.
-
-    """
-
-    INFO = "info"
-    DETAILED = "detailed"
-    TREE = "tree"
-    SUMMARY = "summary"
-
-
 class VerifyRequestTypedDict(TypedDict):
+    r"""Request to verify the C2PA manifest embedded in a digital asset. The asset is processed using memory-efficient streaming to temporary storage."""
+
     asset: AssetRefDtoTypedDict
-    r"""A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object."""
-    mode: NotRequired[VerifyRequestMode]
+    r"""A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage."""
+    mode: NotRequired[str]
     r"""The level of detail to return in the verification report.
-    * `summary`: A high-level pass/fail result. Fastest option.
-    * `info`: Basic information about the manifest and its claims.
-    * `detailed`: In-depth details of all assertions and claims.
-    * `tree`: A hierarchical view of the manifest's ingredient relationships.
+    * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation.
+    * `info`: Basic information about the manifest, claims, and signing entities.
+    * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps.
+    * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
 
     """
+    allow_remote_manifests: NotRequired[bool]
+    r"""Whether to allow fetching and validating remote manifests referenced in the asset's C2PA data."""
+    allow_insecure_remote_http: NotRequired[bool]
+    r"""Whether to allow HTTP (non-HTTPS) URLs when fetching remote manifest resources. Disabled by default for security."""
+    include_certificates: NotRequired[bool]
+    r"""Whether to include full certificate chains and cryptographic details in the verification report."""
+    cawg: NotRequired[CawgVerifyDtoTypedDict]
+    r"""Options controlling CAWG identity validation behavior during verification."""
+    limits: NotRequired[LimitsDtoTypedDict]
+    r"""Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling."""
 
 
 class VerifyRequest(BaseModel):
-    asset: AssetRefDto
-    r"""A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object."""
+    r"""Request to verify the C2PA manifest embedded in a digital asset. The asset is processed using memory-efficient streaming to temporary storage."""
 
-    mode: Optional[VerifyRequestMode] = VerifyRequestMode.SUMMARY
+    asset: AssetRefDto
+    r"""A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage."""
+
+    mode: Optional[str] = "summary"
     r"""The level of detail to return in the verification report.
-    * `summary`: A high-level pass/fail result. Fastest option.
-    * `info`: Basic information about the manifest and its claims.
-    * `detailed`: In-depth details of all assertions and claims.
-    * `tree`: A hierarchical view of the manifest's ingredient relationships.
+    * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation.
+    * `info`: Basic information about the manifest, claims, and signing entities.
+    * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps.
+    * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
 
     """
+
+    allow_remote_manifests: Optional[bool] = False
+    r"""Whether to allow fetching and validating remote manifests referenced in the asset's C2PA data."""
+
+    allow_insecure_remote_http: Optional[bool] = False
+    r"""Whether to allow HTTP (non-HTTPS) URLs when fetching remote manifest resources. Disabled by default for security."""
+
+    include_certificates: Optional[bool] = False
+    r"""Whether to include full certificate chains and cryptographic details in the verification report."""
+
+    cawg: Optional[CawgVerifyDto] = None
+    r"""Options controlling CAWG identity validation behavior during verification."""
+
+    limits: Optional[LimitsDto] = None
+    r"""Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling."""

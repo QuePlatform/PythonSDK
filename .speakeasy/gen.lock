@@ -1,25 +1,26 @@
 lockVersion: 2.0.0
 id: a559c4f4-5ced-4888-977e-9da6df24ea1e
 management:
-  docChecksum: 1b6f1e0e724a103c5bafac828edf515a
+  docChecksum: 5be1033d3fcd17c8b64f613200c1ef01
   docVersion: 1.0.0
-  speakeasyVersion: 1.606.3
-  generationVersion: 2.687.1
-  releaseVersion: 0.0.2
-  configChecksum: 3cb87fb1854fe2e2685bcb6699703b19
+  speakeasyVersion: 1.621.0
+  generationVersion: 2.707.0
+  releaseVersion: 0.1.0
+  configChecksum: e02e2d791f75a4bfe768d682325c2131
+  repoURL: https://github.com/QuePlatform/PythonSDK.git
+  installationURL: https://github.com/QuePlatform/PythonSDK.git
+  published: true
 features:
   python:
     additionalDependencies: 1.0.0
-    additionalProperties: 1.0.1
     constsAndDefaults: 1.0.5
-    core: 5.19.9
+    core: 5.20.4
     defaultEnabledRetries: 0.2.0
-    deprecations: 3.0.2
     devContainers: 3.0.0
     enumUnions: 0.1.0
     envVarSecurityUsage: 0.3.2
     flatRequests: 1.0.1
-    globalSecurity: 3.0.3
+    globalSecurity: 3.0.4
     globalSecurityCallbacks: 1.0.0
     globalSecurityFlattening: 1.0.0
     globalServerURLs: 3.1.1
@@ -37,32 +38,43 @@ generatedFiles:
   - .vscode/settings.json
   - USAGE.md
   - docs/errors/problemresponseerror.md
+  - docs/models/alg.md
   - docs/models/assetrefdto.md
-  - docs/models/bytesbase64.md
+  - docs/models/assurance.md
+  - docs/models/cawgidentitydto.md
+  - docs/models/cawgverifydto.md
   - docs/models/data.md
+  - docs/models/default.md
   - docs/models/details.md
   - docs/models/evidence.md
   - docs/models/getpresignedurlresponse.md
   - docs/models/gettrustlistresponse.md
   - docs/models/healthzresponse.md
-  - docs/models/manifestjson.md
+  - docs/models/limitsdto.md
+  - docs/models/mode.md
   - docs/models/policy.md
   - docs/models/presignedurl.md
   - docs/models/presignresponse.md
   - docs/models/s3.md
   - docs/models/security.md
   - docs/models/signassetresponse.md
+  - docs/models/signer.md
+  - docs/models/signerrefdto.md
+  - docs/models/signerrefdtoenv.md
+  - docs/models/signerrefdtolocal.md
+  - docs/models/signerseparate.md
+  - docs/models/signerusemainsigner.md
+  - docs/models/signingalg.md
   - docs/models/signrequest.md
-  - docs/models/signrequestmode.md
   - docs/models/signresponse.md
-  - docs/models/summary.md
   - docs/models/trustlistresponse.md
+  - docs/models/typeenv.md
+  - docs/models/typelocal.md
+  - docs/models/typeseparate.md
+  - docs/models/typeusemainsigner.md
   - docs/models/utils/retryconfig.md
-  - docs/models/validationstatus.md
-  - docs/models/verificationreport.md
   - docs/models/verifyassetresponse.md
   - docs/models/verifyrequest.md
-  - docs/models/verifyrequestmode.md
   - docs/models/verifyresponse.md
   - docs/sdks/assetmanagement/README.md
   - docs/sdks/que/README.md
@@ -70,6 +82,7 @@ generatedFiles:
   - py.typed
   - pylintrc
   - pyproject.toml
+  - scripts/prepare_readme.py
   - scripts/publish.sh
   - src/que_media/__init__.py
   - src/que_media/_hooks/__init__.py
@@ -87,20 +100,22 @@ generatedFiles:
   - src/que_media/httpclient.py
   - src/que_media/models/__init__.py
   - src/que_media/models/assetrefdto.py
-  - src/que_media/models/bytesbase64.py
+  - src/que_media/models/cawgidentitydto.py
+  - src/que_media/models/cawgverifydto.py
   - src/que_media/models/getpresignedurlop.py
   - src/que_media/models/gettrustlistop.py
   - src/que_media/models/healthzresponse.py
+  - src/que_media/models/limitsdto.py
   - src/que_media/models/presignedurl.py
   - src/que_media/models/presignresponse.py
   - src/que_media/models/problemresponse_error.py
   - src/que_media/models/s3.py
   - src/que_media/models/security.py
   - src/que_media/models/signassetop.py
+  - src/que_media/models/signerrefdto.py
   - src/que_media/models/signrequest.py
   - src/que_media/models/signresponse.py
   - src/que_media/models/trustlistresponse.py
-  - src/que_media/models/verificationreport.py
   - src/que_media/models/verifyassetop.py
   - src/que_media/models/verifyrequest.py
   - src/que_media/models/verifyresponse.py
@@ -131,10 +146,34 @@ examples:
   verifyAsset:
     speakeasy-default-verify-asset:
       requestBody:
-        application/json: {"asset": {"url": "https://example.com/images/provenance-image.jpg"}, "mode": "detailed"}
+        application/json: {"asset": {"url": "https://example.com/images/provenance-image.jpg"}, "mode": "detailed", "allow_remote_manifests": false, "allow_insecure_remote_http": false, "include_certificates": true, "limits": {"max_asset_size_bytes": 104857600, "max_output_size_bytes": 104857600, "max_stream_copy_bytes": 104857600, "stream_timeout_ms": 30000}}
       responses:
         "200":
-          application/json: {"report": {"report": {"validationStatus": [{"code": "claim.signature.validated", "explanation": "Claim signature validated"}], "summary": {"isTrusted": true, "signer": "CN=Que Signing Service"}}}}
+          application/json: {"report": "<value>"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    basic-verification:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/photo.jpg"}, "mode": "summary", "allow_remote_manifests": false, "allow_insecure_remote_http": false, "include_certificates": true}
+      responses:
+        "200":
+          application/json: {"report": "<value>"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    detailed-verification:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/document.pdf"}, "mode": "detailed", "allow_remote_manifests": true, "allow_insecure_remote_http": false, "include_certificates": true, "limits": {"max_asset_size_bytes": 52428800}}
+      responses:
+        "200":
+          application/json: {"report": "<value>"}
         "400":
           application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
         "429":
@@ -144,10 +183,34 @@ examples:
   signAsset:
     speakeasy-default-sign-asset:
       requestBody:
-        application/json: {"asset": {"b64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="}, "mode": "server_measure", "manifest_json": {}}
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/user123/asset.jpg"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Original Photograph\",\"format\":\"image/jpeg\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"Jane Photographer\"}]}}]}", "allow_insecure_remote_http": false, "limits": {"max_asset_size_bytes": 104857600, "max_output_size_bytes": 104857600, "max_stream_copy_bytes": 104857600, "stream_timeout_ms": 30000}}
       responses:
         "200":
-          application/json: {"assurance": "server_measured", "evidence": {}, "asset_s3_uri": "s3://Que-signed-assets/a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8/signed.jpg"}
+          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    basic-signing:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/photo.jpg"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Original Photograph\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"Jane Photographer\"}]}}]}", "allow_insecure_remote_http": false}
+      responses:
+        "200":
+          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    advanced-signing:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/document.pdf"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Signed Document\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"John Author\"}]}}]}", "allow_insecure_remote_http": false, "limits": {"max_asset_size_bytes": 104857600, "stream_timeout_ms": 60000}}
+      responses:
+        "200":
+          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
         "400":
           application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
         "429":
@@ -163,7 +226,7 @@ examples:
     speakeasy-default-get-trust-list:
       responses:
         "200":
-          application/json: {"version": "prod-2025-08-15", "issued_at": "2025-08-15T20:00:00Z", "data": {"manufacturers": ["Example Camera Corp"], "cas": ["-----BEGIN CERTIFICATE-----\nMIID...=\n-----END CERTIFICATE-----"], "policy": {"default": "allow"}}}
+          application/json: {"version": "dev-1", "issued_at": "2024-01-15T10:00:00Z", "data": {"manufacturers": [], "cas": [], "policy": {"default": "allow"}}}
         "401":
           application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
         "429":
@@ -174,7 +237,7 @@ examples:
     speakeasy-default-get-presigned-url:
       responses:
         "200":
-          application/json: {"url": "https://Que-customer-uploads.s3.amazonaws.com/new-asset-key?AWSAccessKeyId=...", "key": "uploads/user123/timestamp/asset.jpg"}
+          application/json: {"url": "https://que-assets-dev.s3.us-east-2.amazonaws.com/uploads/user123/asset.jpg?AWSAccessKeyId=...&Signature=...&Expires=...", "key": "uploads/user123/asset.jpg"}
         "401":
           application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
         "429":
@@ -182,3 +245,4 @@ examples:
         "500":
           application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
 examplesVersion: 1.0.2
+releaseNotes: "## Python SDK Changes Detected:\n* `que.verify_asset()`: \n  *  `request` **Changed** **Breaking** :warning:\n  *  `response.report` **Changed** **Breaking** :warning:\n* `que.sign_asset()`: \n  *  `request` **Changed** **Breaking** :warning:\n  *  `response` **Changed** **Breaking** :warning:\n* `que.utility.get_trust_list()`:  `response.data.policy.default` **Changed** **Breaking** :warning:\n"
