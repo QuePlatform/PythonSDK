@@ -6,7 +6,7 @@ from typing_extensions import TypedDict
 
 
 class S3TypedDict(TypedDict):
-    r"""An asset located in an S3 bucket that the Que service has access to."""
+    r"""An asset located in an S3 bucket that the Que service has access to. The service will stream the file from S3 to temporary storage during processing."""
 
     bucket: str
     r"""The name of the S3 bucket."""
@@ -15,7 +15,7 @@ class S3TypedDict(TypedDict):
 
 
 class S3(BaseModel):
-    r"""An asset located in an S3 bucket that the Que service has access to."""
+    r"""An asset located in an S3 bucket that the Que service has access to. The service will stream the file from S3 to temporary storage during processing."""
 
     bucket: str
     r"""The name of the S3 bucket."""

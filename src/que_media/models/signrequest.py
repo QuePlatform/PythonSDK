@@ -2,20 +2,18 @@
 
 from __future__ import annotations
 from .assetrefdto import AssetRefDto, AssetRefDtoTypedDict
+from .cawgidentitydto import CawgIdentityDto, CawgIdentityDtoTypedDict
+from .limitsdto import LimitsDto, LimitsDtoTypedDict
 from enum import Enum
-import pydantic
 from que_media.types import BaseModel
 from typing import Optional
-from typing_extensions import Annotated, NotRequired, TypedDict, deprecated
+from typing_extensions import NotRequired, TypedDict
 
 
-@deprecated(
-    "warning: ** DEPRECATED ** - This will be removed in a future release, please migrate away from it as soon as possible."
-)
-class SignRequestMode(str, Enum):
+class Mode(str, Enum):
     r"""The signing mode to use.
-    * `server_measure`: The server will download the asset, calculate its hash, and embed the manifest. Requires `manifest_json`.
-    * `client_hash`: The client provides the asset hash directly. (Not yet implemented).
+    * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode.
+    * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
 
     """
 
@@ -23,42 +21,48 @@ class SignRequestMode(str, Enum):
     CLIENT_HASH = "client_hash"
 
 
-class ManifestJSONTypedDict(TypedDict):
-    r"""The C2PA manifest to embed in the asset. This is required when `mode` is `server_measure`."""
-
-
-class ManifestJSON(BaseModel):
-    r"""The C2PA manifest to embed in the asset. This is required when `mode` is `server_measure`."""
-
-
 class SignRequestTypedDict(TypedDict):
+    r"""Request to sign a digital asset with a C2PA manifest. The asset is processed using memory-efficient streaming to temporary storage."""
+
     asset: AssetRefDtoTypedDict
-    r"""A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object."""
-    mode: SignRequestMode
+    r"""A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage."""
+    mode: Mode
     r"""The signing mode to use.
-    * `server_measure`: The server will download the asset, calculate its hash, and embed the manifest. Requires `manifest_json`.
-    * `client_hash`: The client provides the asset hash directly. (Not yet implemented).
+    * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode.
+    * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
 
     """
-    manifest_json: NotRequired[ManifestJSONTypedDict]
-    r"""The C2PA manifest to embed in the asset. This is required when `mode` is `server_measure`."""
+    manifest_json: NotRequired[str]
+    r"""JSON string containing the manifest to embed in the asset as a C2PA claim. This defines the provenance information and assertions about the asset. Required when `mode` is `server_measure`."""
+    cawg: NotRequired[CawgIdentityDtoTypedDict]
+    r"""Configuration to add a CAWG identity assertion during signing. Presence of this object enables CAWG."""
+    allow_insecure_remote_http: NotRequired[bool]
+    r"""Whether to allow HTTP (non-HTTPS) URLs for remote manifest resources. Disabled by default for security."""
+    limits: NotRequired[LimitsDtoTypedDict]
+    r"""Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling."""
 
 
 class SignRequest(BaseModel):
-    asset: AssetRefDto
-    r"""A reference to a digital asset. The asset can be provided inline as Base64, via a public URL, or by referencing an S3 object."""
+    r"""Request to sign a digital asset with a C2PA manifest. The asset is processed using memory-efficient streaming to temporary storage."""
 
-    mode: Annotated[
-        SignRequestMode,
-        pydantic.Field(
-            deprecated="warning: ** DEPRECATED ** - This will be removed in a future release, please migrate away from it as soon as possible."
-        ),
-    ]
+    asset: AssetRefDto
+    r"""A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage."""
+
+    mode: Mode
     r"""The signing mode to use.
-    * `server_measure`: The server will download the asset, calculate its hash, and embed the manifest. Requires `manifest_json`.
-    * `client_hash`: The client provides the asset hash directly. (Not yet implemented).
+    * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode.
+    * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
 
     """
 
-    manifest_json: Optional[ManifestJSON] = None
-    r"""The C2PA manifest to embed in the asset. This is required when `mode` is `server_measure`."""
+    manifest_json: Optional[str] = None
+    r"""JSON string containing the manifest to embed in the asset as a C2PA claim. This defines the provenance information and assertions about the asset. Required when `mode` is `server_measure`."""
+
+    cawg: Optional[CawgIdentityDto] = None
+    r"""Configuration to add a CAWG identity assertion during signing. Presence of this object enables CAWG."""
+
+    allow_insecure_remote_http: Optional[bool] = False
+    r"""Whether to allow HTTP (non-HTTPS) URLs for remote manifest resources. Disabled by default for security."""
+
+    limits: Optional[LimitsDto] = None
+    r"""Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling."""

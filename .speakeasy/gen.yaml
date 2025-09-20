@@ -17,18 +17,22 @@ generation:
     securityFeb2025: true
     sharedErrorComponentsApr2025: true
   auth:
-    oAuth2ClientCredentialsEnabled: true
-    oAuth2PasswordEnabled: true
+    oAuth2ClientCredentialsEnabled: false
+    oAuth2PasswordEnabled: false
+    hoistGlobalSecurity: true
   sdkHooksConfigAccess: true
   tests:
     generateTests: false
     generateNewTests: true
     skipResponseBodyAssertions: false
 python:
-  version: 0.0.2
+  version: 0.1.0
   additionalDependencies:
     dev: {}
     main: {}
+  allowedRedefinedBuiltins:
+    - id
+    - object
   authors:
     - Speakeasy
   baseErrorName: QueError
@@ -61,4 +65,5 @@ python:
   pytestFilterWarnings: []
   pytestTimeout: 0
   responseFormat: flat
+  sseFlatResponse: false
   templateVersion: v2

@@ -174,7 +174,15 @@ class Utility(BaseSDK):
     ) -> models.GetTrustListResponse:
         r"""Retrieve the current C2PA trust bundle
 
-        Fetches the latest C2PA trust list, which includes trusted certificate authorities and hardware manufacturers. This list is used by verifiers to determine if a signature on a manifest is from a trusted source.
+        Fetches the latest C2PA trust list containing trusted certificate authorities, hardware manufacturers, and trust policies.
+
+        The trust list is used during manifest verification to:
+        - Validate signer certificates against trusted Certificate Authorities
+        - Verify hardware manufacturer claims for camera-captured content
+        - Apply trust policies for different validation scenarios
+
+        Trust lists are versioned and should be refreshed periodically as new trusted entities are added or certificates expire.
+
 
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method
@@ -269,7 +277,15 @@ class Utility(BaseSDK):
     ) -> models.GetTrustListResponse:
         r"""Retrieve the current C2PA trust bundle
 
-        Fetches the latest C2PA trust list, which includes trusted certificate authorities and hardware manufacturers. This list is used by verifiers to determine if a signature on a manifest is from a trusted source.
+        Fetches the latest C2PA trust list containing trusted certificate authorities, hardware manufacturers, and trust policies.
+
+        The trust list is used during manifest verification to:
+        - Validate signer certificates against trusted Certificate Authorities
+        - Verify hardware manufacturer claims for camera-captured content
+        - Apply trust policies for different validation scenarios
+
+        Trust lists are versioned and should be refreshed periodically as new trusted entities are added or certificates expire.
+
 
         :param retries: Override the default retry configuration for this method
         :param server_url: Override the default server URL for this method

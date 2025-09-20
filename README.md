@@ -15,15 +15,22 @@ Developer-friendly & type-safe Python SDK specifically catered to leverage *que_
 <!-- Start Summary [summary] -->
 ## Summary
 
-Que API: Welcome to the Que Public HTTP API. Our platform provides robust tools for working with C2PA (Coalition for Content Provenance and Authenticity) manifests, enabling you to sign and verify digital assets to ensure their authenticity and provenance.
+Que API: Welcome to the Que Public HTTP API for C2PA (Content Authenticity Initiative) provenance management.
+
+Our platform provides robust tools for working with digital asset provenance through C2PA manifests, enabling you to sign and verify digital assets to ensure their authenticity, origin, and processing history.
 
 **Key Features:**
-*   **Verify**: Inspect and validate C2PA manifests embedded in assets.
-*   **Sign**: Embed C2PA manifests into your assets with a server-side signature.
-*   **Trust Management**: Retrieve the current C2PA trust list.
+*   **Memory-Efficient Streaming**: Assets are processed using streaming techniques to minimize memory usage, supporting large files efficiently
+*   **Verify**: Inspect and validate C2PA manifests embedded in assets with multiple detail levels
+*   **Sign**: Embed comprehensive C2PA manifests into your assets with server-side cryptographic signatures
+*   **Trust Management**: Retrieve and validate against current trust lists containing trusted certificate authorities and manufacturers
+*   **Secure Uploads**: Direct-to-S3 uploads via presigned URLs for large assets
 
 **Authentication:**
 All endpoints (except for `/healthz`) are secured and require an API key to be passed in the `x-api-key` header.
+
+**Processing Architecture:**
+Assets are streamed from S3 or URLs to temporary storage during processing to ensure O(chunk_size) memory usage instead of O(file_size), enabling efficient handling of large files on containerized platforms.
 
 Usage of this API is tracked via Firehose for billing and monitoring purposes.
 
@@ -55,10 +62,6 @@ For more information about the API: [Find more detailed documentation and tutori
 <!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
-> [!TIP]
-> To finish publishing your SDK to PyPI you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
-
-
 > [!NOTE]
 > **Python version upgrade policy**
 >
@@ -71,7 +74,7 @@ The SDK can be installed with *uv*, *pip*, or *poetry* package managers.
 *uv* is a fast Python package installer and resolver, designed as a drop-in replacement for pip and pip-tools. It's recommended for its speed and modern Python tooling capabilities.
 
 ```bash
-uv add git+<UNSET>.git
+uv add que_media
 ```
 
 ### PIP
@@ -79,7 +82,7 @@ uv add git+<UNSET>.git
 *PIP* is the default package installer for Python, enabling easy installation and management of packages from PyPI via the command line.
 
 ```bash
-pip install git+<UNSET>.git
+pip install que_media
 ```
 
 ### Poetry
@@ -87,7 +90,7 @@ pip install git+<UNSET>.git
 *Poetry* is a modern tool that simplifies dependency management and package publishing by using a single `pyproject.toml` file to handle project metadata and dependencies.
 
 ```bash
-poetry add git+<UNSET>.git
+poetry add que_media
 ```
 
 ### Shell and script usage with `uv`
@@ -140,7 +143,7 @@ Generally, the SDK will work well with most IDEs out of the box. However, when u
 ```python
 # Synchronous Example
 import os
-from que_media import Que, models
+from que_media import Que
 
 
 with Que(
@@ -148,8 +151,14 @@ with Que(
 ) as que:
 
     res = que.verify_asset(asset={
-        "url": "https://example.com/images/provenance-image.jpg",
-    }, mode=models.VerifyRequestMode.DETAILED)
+        "bucket": "que-assets-dev",
+        "key": "uploads/photo.jpg",
+    }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+        "max_asset_size_bytes": 104857600,
+        "max_output_size_bytes": 104857600,
+        "max_stream_copy_bytes": 104857600,
+        "stream_timeout_ms": 30000,
+    })
 
     # Handle response
     print(res)
@@ -162,7 +171,7 @@ The same SDK client can also be used to make asynchronous requests by importing 
 # Asynchronous Example
 import asyncio
 import os
-from que_media import Que, models
+from que_media import Que
 
 async def main():
 
@@ -171,8 +180,14 @@ async def main():
     ) as que:
 
         res = await que.verify_asset_async(asset={
-            "url": "https://example.com/images/provenance-image.jpg",
-        }, mode=models.VerifyRequestMode.DETAILED)
+            "bucket": "que-assets-dev",
+            "key": "uploads/photo.jpg",
+        }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+            "max_asset_size_bytes": 104857600,
+            "max_output_size_bytes": 104857600,
+            "max_stream_copy_bytes": 104857600,
+            "stream_timeout_ms": 30000,
+        })
 
         # Handle response
         print(res)
@@ -195,7 +210,7 @@ This SDK supports the following security scheme globally:
 To authenticate with the API the `api_key_auth` parameter must be set when initializing the SDK client instance. For example:
 ```python
 import os
-from que_media import Que, models
+from que_media import Que
 
 
 with Que(
@@ -203,8 +218,14 @@ with Que(
 ) as que:
 
     res = que.verify_asset(asset={
-        "url": "https://example.com/images/provenance-image.jpg",
-    }, mode=models.VerifyRequestMode.DETAILED)
+        "bucket": "que-assets-dev",
+        "key": "uploads/photo.jpg",
+    }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+        "max_asset_size_bytes": 104857600,
+        "max_output_size_bytes": 104857600,
+        "max_stream_copy_bytes": 104857600,
+        "stream_timeout_ms": 30000,
+    })
 
     # Handle response
     print(res)
@@ -220,7 +241,7 @@ with Que(
 
 ### [asset_management](docs/sdks/assetmanagement/README.md)
 
-* [get_presigned_url](docs/sdks/assetmanagement/README.md#get_presigned_url) - Get an S3 presigned URL for uploads
+* [get_presigned_url](docs/sdks/assetmanagement/README.md#get_presigned_url) - Get an S3 presigned URL for secure uploads
 
 ### [Que SDK](docs/sdks/que/README.md)
 
@@ -243,7 +264,7 @@ Some of the endpoints in this SDK support retries. If you use the SDK without an
 To change the default retry strategy for a single API call, simply provide a `RetryConfig` object to the call:
 ```python
 import os
-from que_media import Que, models
+from que_media import Que
 from que_media.utils import BackoffStrategy, RetryConfig
 
 
@@ -252,8 +273,14 @@ with Que(
 ) as que:
 
     res = que.verify_asset(asset={
-        "url": "https://example.com/images/provenance-image.jpg",
-    }, mode=models.VerifyRequestMode.DETAILED,
+        "bucket": "que-assets-dev",
+        "key": "uploads/photo.jpg",
+    }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+        "max_asset_size_bytes": 104857600,
+        "max_output_size_bytes": 104857600,
+        "max_stream_copy_bytes": 104857600,
+        "stream_timeout_ms": 30000,
+    },
         RetryConfig("backoff", BackoffStrategy(1, 50, 1.1, 100), False))
 
     # Handle response
@@ -264,7 +291,7 @@ with Que(
 If you'd like to override the default retry strategy for all operations that support retries, you can use the `retry_config` optional parameter when initializing the SDK:
 ```python
 import os
-from que_media import Que, models
+from que_media import Que
 from que_media.utils import BackoffStrategy, RetryConfig
 
 
@@ -274,8 +301,14 @@ with Que(
 ) as que:
 
     res = que.verify_asset(asset={
-        "url": "https://example.com/images/provenance-image.jpg",
-    }, mode=models.VerifyRequestMode.DETAILED)
+        "bucket": "que-assets-dev",
+        "key": "uploads/photo.jpg",
+    }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+        "max_asset_size_bytes": 104857600,
+        "max_output_size_bytes": 104857600,
+        "max_stream_copy_bytes": 104857600,
+        "stream_timeout_ms": 30000,
+    })
 
     # Handle response
     print(res)
@@ -300,7 +333,7 @@ with Que(
 ### Example
 ```python
 import os
-from que_media import Que, errors, models
+from que_media import Que, errors
 
 
 with Que(
@@ -310,8 +343,14 @@ with Que(
     try:
 
         res = que.verify_asset(asset={
-            "url": "https://example.com/images/provenance-image.jpg",
-        }, mode=models.VerifyRequestMode.DETAILED)
+            "bucket": "que-assets-dev",
+            "key": "uploads/photo.jpg",
+        }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+            "max_asset_size_bytes": 104857600,
+            "max_output_size_bytes": 104857600,
+            "max_stream_copy_bytes": 104857600,
+            "stream_timeout_ms": 30000,
+        })
 
         # Handle response
         print(res)
@@ -372,7 +411,7 @@ The default server `https://{environment}.addque.org/` contains variables and is
 
 ```python
 import os
-from que_media import Que, models
+from que_media import Que
 
 
 with Que(
@@ -381,8 +420,14 @@ with Que(
 ) as que:
 
     res = que.verify_asset(asset={
-        "url": "https://example.com/images/provenance-image.jpg",
-    }, mode=models.VerifyRequestMode.DETAILED)
+        "bucket": "que-assets-dev",
+        "key": "uploads/photo.jpg",
+    }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+        "max_asset_size_bytes": 104857600,
+        "max_output_size_bytes": 104857600,
+        "max_stream_copy_bytes": 104857600,
+        "stream_timeout_ms": 30000,
+    })
 
     # Handle response
     print(res)
@@ -394,7 +439,7 @@ with Que(
 The default server can be overridden globally by passing a URL to the `server_url: str` optional parameter when initializing the SDK client instance. For example:
 ```python
 import os
-from que_media import Que, models
+from que_media import Que
 
 
 with Que(
@@ -403,8 +448,14 @@ with Que(
 ) as que:
 
     res = que.verify_asset(asset={
-        "url": "https://example.com/images/provenance-image.jpg",
-    }, mode=models.VerifyRequestMode.DETAILED)
+        "bucket": "que-assets-dev",
+        "key": "uploads/photo.jpg",
+    }, mode="summary", allow_remote_manifests=False, allow_insecure_remote_http=False, include_certificates=True, limits={
+        "max_asset_size_bytes": 104857600,
+        "max_output_size_bytes": 104857600,
+        "max_stream_copy_bytes": 104857600,
+        "stream_timeout_ms": 30000,
+    })
 
     # Handle response
     print(res)

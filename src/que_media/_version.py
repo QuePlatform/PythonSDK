@@ -3,10 +3,10 @@
 import importlib.metadata
 
 __title__: str = "que_media"
-__version__: str = "0.0.2"
+__version__: str = "0.1.0"
 __openapi_doc_version__: str = "1.0.0"
-__gen_version__: str = "2.687.1"
-__user_agent__: str = "speakeasy-sdk/python 0.0.2 2.687.1 1.0.0 que_media"
+__gen_version__: str = "2.707.0"
+__user_agent__: str = "speakeasy-sdk/python 0.1.0 2.707.0 1.0.0 que_media"
 
 try:
     if __package__ is not None:

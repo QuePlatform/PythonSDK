@@ -6,19 +6,19 @@ from typing_extensions import TypedDict
 
 
 class PresignResponseTypedDict(TypedDict):
-    r"""A presigned URL that can be used for a temporary, authenticated upload to S3."""
+    r"""A presigned URL and object key for secure S3 upload. Use the URL to upload your asset directly to S3, then use the returned key for signing/verification operations."""
 
     url: str
-    r"""The presigned S3 URL to which the client should PUT the asset file."""
+    r"""The presigned S3 URL for direct upload. Make a PUT request to this URL with your asset file as the body. The URL is valid for a limited time (typically 15 minutes)."""
     key: str
-    r"""The S3 object key that the asset will have after being uploaded. This key should be used in subsequent API calls."""
+    r"""The S3 object key where your asset will be stored. Use this key in subsequent sign/verify API calls to reference the uploaded asset."""
 
 
 class PresignResponse(BaseModel):
-    r"""A presigned URL that can be used for a temporary, authenticated upload to S3."""
+    r"""A presigned URL and object key for secure S3 upload. Use the URL to upload your asset directly to S3, then use the returned key for signing/verification operations."""
 
     url: str
-    r"""The presigned S3 URL to which the client should PUT the asset file."""
+    r"""The presigned S3 URL for direct upload. Make a PUT request to this URL with your asset file as the body. The URL is valid for a limited time (typically 15 minutes)."""
 
     key: str
-    r"""The S3 object key that the asset will have after being uploaded. This key should be used in subsequent API calls."""
+    r"""The S3 object key where your asset will be stored. Use this key in subsequent sign/verify API calls to reference the uploaded asset."""

@@ -1,20 +1,21 @@
-speakeasyVersion: 1.606.3
+speakeasyVersion: 1.621.0
 sources:
     Que API:
         sourceNamespace: que-api
-        sourceRevisionDigest: sha256:8d011d455ba3d4da5196eda0e3d524ecfe52d75c3419f2f065cd90d81f1dc49f
-        sourceBlobDigest: sha256:3c1e48a67c019faed5972f2105b937c1b026076b5927621db38e3967ce5a7385
+        sourceRevisionDigest: sha256:34954edfb908002665dacd33ccf10bcc5454c2b1b48d70c356dc7f059038cb08
+        sourceBlobDigest: sha256:53c4b50cdb8f9f86777d7b7787c2841a6de6c1b9141bbca7f42509fdb1e9526a
         tags:
             - latest
+            - speakeasy-sdk-regen-1758290879
             - 1.0.0
 targets:
     que:
         source: Que API
         sourceNamespace: que-api
-        sourceRevisionDigest: sha256:8d011d455ba3d4da5196eda0e3d524ecfe52d75c3419f2f065cd90d81f1dc49f
-        sourceBlobDigest: sha256:3c1e48a67c019faed5972f2105b937c1b026076b5927621db38e3967ce5a7385
+        sourceRevisionDigest: sha256:34954edfb908002665dacd33ccf10bcc5454c2b1b48d70c356dc7f059038cb08
+        sourceBlobDigest: sha256:53c4b50cdb8f9f86777d7b7787c2841a6de6c1b9141bbca7f42509fdb1e9526a
         codeSamplesNamespace: que-api-python-code-samples
-        codeSamplesRevisionDigest: sha256:df79ab3d84facb1590b1bd6da94b3224467583fbf0c802359304b7a8788f38ae
+        codeSamplesRevisionDigest: sha256:e06089f7bf1a7798be279876f8af06ba3228e36ac454e548ff4c6e70746bf0dc
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -29,6 +30,9 @@ workflow:
         que:
             target: python
             source: Que API
+            publish:
+                pypi:
+                    token: $pypi_token
             codeSamples:
                 registry:
                     location: registry.speakeasyapi.dev/que-cr2/que/que-api-python-code-samples

@@ -3,30 +3,51 @@
 from typing import TYPE_CHECKING
 from importlib import import_module
 import builtins
+import sys
 
 if TYPE_CHECKING:
     from .assetrefdto import AssetRefDto, AssetRefDtoTypedDict
-    from .bytesbase64 import BytesBase64, BytesBase64TypedDict
+    from .cawgidentitydto import (
+        CawgIdentityDto,
+        CawgIdentityDtoTypedDict,
+        Signer,
+        SignerSeparate,
+        SignerSeparateTypedDict,
+        SignerTypedDict,
+        SignerUseMainSigner,
+        SignerUseMainSignerTypedDict,
+        SigningAlg,
+        TypeSeparate,
+        TypeUseMainSigner,
+    )
+    from .cawgverifydto import CawgVerifyDto, CawgVerifyDtoTypedDict
     from .getpresignedurlop import (
         GetPresignedURLResponse,
         GetPresignedURLResponseTypedDict,
     )
     from .gettrustlistop import GetTrustListResponse, GetTrustListResponseTypedDict
     from .healthzresponse import HealthzResponse, HealthzResponseTypedDict
+    from .limitsdto import LimitsDto, LimitsDtoTypedDict
     from .presignedurl import PresignedURL, PresignedURLTypedDict
     from .presignresponse import PresignResponse, PresignResponseTypedDict
     from .problemresponse_error import Details, DetailsTypedDict
     from .s3 import S3, S3TypedDict
     from .security import Security, SecurityTypedDict
     from .signassetop import SignAssetResponse, SignAssetResponseTypedDict
-    from .signrequest import (
-        ManifestJSON,
-        ManifestJSONTypedDict,
-        SignRequest,
-        SignRequestMode,
-        SignRequestTypedDict,
+    from .signerrefdto import (
+        SignerRefDto,
+        SignerRefDtoEnv,
+        SignerRefDtoEnvTypedDict,
+        SignerRefDtoLocal,
+        SignerRefDtoLocalTypedDict,
+        SignerRefDtoTypedDict,
+        TypeEnv,
+        TypeLocal,
     )
+    from .signrequest import Mode, SignRequest, SignRequestTypedDict
     from .signresponse import (
+        Alg,
+        Assurance,
         Evidence,
         EvidenceTypedDict,
         SignResponse,
@@ -35,30 +56,28 @@ if TYPE_CHECKING:
     from .trustlistresponse import (
         Data,
         DataTypedDict,
+        Default,
         Policy,
         PolicyTypedDict,
         TrustListResponse,
         TrustListResponseTypedDict,
     )
-    from .verificationreport import (
-        Summary,
-        SummaryTypedDict,
-        ValidationStatus,
-        ValidationStatusTypedDict,
-        VerificationReport,
-        VerificationReportTypedDict,
-    )
     from .verifyassetop import VerifyAssetResponse, VerifyAssetResponseTypedDict
-    from .verifyrequest import VerifyRequest, VerifyRequestMode, VerifyRequestTypedDict
+    from .verifyrequest import VerifyRequest, VerifyRequestTypedDict
     from .verifyresponse import VerifyResponse, VerifyResponseTypedDict
 
 __all__ = [
+    "Alg",
     "AssetRefDto",
     "AssetRefDtoTypedDict",
-    "BytesBase64",
-    "BytesBase64TypedDict",
+    "Assurance",
+    "CawgIdentityDto",
+    "CawgIdentityDtoTypedDict",
+    "CawgVerifyDto",
+    "CawgVerifyDtoTypedDict",
     "Data",
     "DataTypedDict",
+    "Default",
     "Details",
     "DetailsTypedDict",
     "Evidence",
@@ -69,8 +88,9 @@ __all__ = [
     "GetTrustListResponseTypedDict",
     "HealthzResponse",
     "HealthzResponseTypedDict",
-    "ManifestJSON",
-    "ManifestJSONTypedDict",
+    "LimitsDto",
+    "LimitsDtoTypedDict",
+    "Mode",
     "Policy",
     "PolicyTypedDict",
     "PresignResponse",
@@ -84,22 +104,31 @@ __all__ = [
     "SignAssetResponse",
     "SignAssetResponseTypedDict",
     "SignRequest",
-    "SignRequestMode",
     "SignRequestTypedDict",
     "SignResponse",
     "SignResponseTypedDict",
-    "Summary",
-    "SummaryTypedDict",
+    "Signer",
+    "SignerRefDto",
+    "SignerRefDtoEnv",
+    "SignerRefDtoEnvTypedDict",
+    "SignerRefDtoLocal",
+    "SignerRefDtoLocalTypedDict",
+    "SignerRefDtoTypedDict",
+    "SignerSeparate",
+    "SignerSeparateTypedDict",
+    "SignerTypedDict",
+    "SignerUseMainSigner",
+    "SignerUseMainSignerTypedDict",
+    "SigningAlg",
     "TrustListResponse",
     "TrustListResponseTypedDict",
-    "ValidationStatus",
-    "ValidationStatusTypedDict",
-    "VerificationReport",
-    "VerificationReportTypedDict",
+    "TypeEnv",
+    "TypeLocal",
+    "TypeSeparate",
+    "TypeUseMainSigner",
     "VerifyAssetResponse",
     "VerifyAssetResponseTypedDict",
     "VerifyRequest",
-    "VerifyRequestMode",
     "VerifyRequestTypedDict",
     "VerifyResponse",
     "VerifyResponseTypedDict",
@@ -108,14 +137,27 @@ __all__ = [
 _dynamic_imports: dict[str, str] = {
     "AssetRefDto": ".assetrefdto",
     "AssetRefDtoTypedDict": ".assetrefdto",
-    "BytesBase64": ".bytesbase64",
-    "BytesBase64TypedDict": ".bytesbase64",
+    "CawgIdentityDto": ".cawgidentitydto",
+    "CawgIdentityDtoTypedDict": ".cawgidentitydto",
+    "Signer": ".cawgidentitydto",
+    "SignerSeparate": ".cawgidentitydto",
+    "SignerSeparateTypedDict": ".cawgidentitydto",
+    "SignerTypedDict": ".cawgidentitydto",
+    "SignerUseMainSigner": ".cawgidentitydto",
+    "SignerUseMainSignerTypedDict": ".cawgidentitydto",
+    "SigningAlg": ".cawgidentitydto",
+    "TypeSeparate": ".cawgidentitydto",
+    "TypeUseMainSigner": ".cawgidentitydto",
+    "CawgVerifyDto": ".cawgverifydto",
+    "CawgVerifyDtoTypedDict": ".cawgverifydto",
     "GetPresignedURLResponse": ".getpresignedurlop",
     "GetPresignedURLResponseTypedDict": ".getpresignedurlop",
     "GetTrustListResponse": ".gettrustlistop",
     "GetTrustListResponseTypedDict": ".gettrustlistop",
     "HealthzResponse": ".healthzresponse",
     "HealthzResponseTypedDict": ".healthzresponse",
+    "LimitsDto": ".limitsdto",
+    "LimitsDtoTypedDict": ".limitsdto",
     "PresignedURL": ".presignedurl",
     "PresignedURLTypedDict": ".presignedurl",
     "PresignResponse": ".presignresponse",
@@ -128,35 +170,49 @@ _dynamic_imports: dict[str, str] = {
     "SecurityTypedDict": ".security",
     "SignAssetResponse": ".signassetop",
     "SignAssetResponseTypedDict": ".signassetop",
-    "ManifestJSON": ".signrequest",
-    "ManifestJSONTypedDict": ".signrequest",
+    "SignerRefDto": ".signerrefdto",
+    "SignerRefDtoEnv": ".signerrefdto",
+    "SignerRefDtoEnvTypedDict": ".signerrefdto",
+    "SignerRefDtoLocal": ".signerrefdto",
+    "SignerRefDtoLocalTypedDict": ".signerrefdto",
+    "SignerRefDtoTypedDict": ".signerrefdto",
+    "TypeEnv": ".signerrefdto",
+    "TypeLocal": ".signerrefdto",
+    "Mode": ".signrequest",
     "SignRequest": ".signrequest",
-    "SignRequestMode": ".signrequest",
     "SignRequestTypedDict": ".signrequest",
+    "Alg": ".signresponse",
+    "Assurance": ".signresponse",
     "Evidence": ".signresponse",
     "EvidenceTypedDict": ".signresponse",
     "SignResponse": ".signresponse",
     "SignResponseTypedDict": ".signresponse",
     "Data": ".trustlistresponse",
     "DataTypedDict": ".trustlistresponse",
+    "Default": ".trustlistresponse",
     "Policy": ".trustlistresponse",
     "PolicyTypedDict": ".trustlistresponse",
     "TrustListResponse": ".trustlistresponse",
     "TrustListResponseTypedDict": ".trustlistresponse",
-    "Summary": ".verificationreport",
-    "SummaryTypedDict": ".verificationreport",
-    "ValidationStatus": ".verificationreport",
-    "ValidationStatusTypedDict": ".verificationreport",
-    "VerificationReport": ".verificationreport",
-    "VerificationReportTypedDict": ".verificationreport",
     "VerifyAssetResponse": ".verifyassetop",
     "VerifyAssetResponseTypedDict": ".verifyassetop",
     "VerifyRequest": ".verifyrequest",
-    "VerifyRequestMode": ".verifyrequest",
     "VerifyRequestTypedDict": ".verifyrequest",
     "VerifyResponse": ".verifyresponse",
     "VerifyResponseTypedDict": ".verifyresponse",
 }
+
+
+def dynamic_import(modname, retries=3):
+    for attempt in range(retries):
+        try:
+            return import_module(modname, __package__)
+        except KeyError:
+            # Clear any half-initialized module and retry
+            sys.modules.pop(modname, None)
+            if attempt == retries - 1:
+                break
+    raise KeyError(f"Failed to import module '{modname}' after {retries} attempts")
 
 
 def __getattr__(attr_name: str) -> object:
@@ -167,7 +223,7 @@ def __getattr__(attr_name: str) -> object:
         )
 
     try:
-        module = import_module(module_name, __package__)
+        module = dynamic_import(module_name)
         result = getattr(module, attr_name)
         return result
     except ImportError as e:
