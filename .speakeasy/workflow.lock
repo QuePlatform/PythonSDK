@@ -1,21 +1,20 @@
-speakeasyVersion: 1.621.0
+speakeasyVersion: 1.789.0
 sources:
     Que API:
         sourceNamespace: que-api
-        sourceRevisionDigest: sha256:34954edfb908002665dacd33ccf10bcc5454c2b1b48d70c356dc7f059038cb08
-        sourceBlobDigest: sha256:53c4b50cdb8f9f86777d7b7787c2841a6de6c1b9141bbca7f42509fdb1e9526a
+        sourceRevisionDigest: sha256:db4314960ab8be1090f6a6e05f3b277efe05bfeb232b774002d3dd8d4131b397
+        sourceBlobDigest: sha256:013f17c7152c90a5764fd09c6712f901aae415d3a6323560f4107872ec9f5d0b
         tags:
             - latest
-            - speakeasy-sdk-regen-1758290879
             - 1.0.0
 targets:
     que:
         source: Que API
         sourceNamespace: que-api
-        sourceRevisionDigest: sha256:34954edfb908002665dacd33ccf10bcc5454c2b1b48d70c356dc7f059038cb08
-        sourceBlobDigest: sha256:53c4b50cdb8f9f86777d7b7787c2841a6de6c1b9141bbca7f42509fdb1e9526a
+        sourceRevisionDigest: sha256:db4314960ab8be1090f6a6e05f3b277efe05bfeb232b774002d3dd8d4131b397
+        sourceBlobDigest: sha256:013f17c7152c90a5764fd09c6712f901aae415d3a6323560f4107872ec9f5d0b
         codeSamplesNamespace: que-api-python-code-samples
-        codeSamplesRevisionDigest: sha256:e06089f7bf1a7798be279876f8af06ba3228e36ac454e548ff4c6e70746bf0dc
+        codeSamplesRevisionDigest: sha256:2899c0f149c2611a2546e9024489a997ba3eca01fa4f6fb6b428bf9f650c0fd5
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

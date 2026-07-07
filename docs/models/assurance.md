@@ -2,6 +2,14 @@
 
 The level of assurance provided by the signing process.
 
+## Example Usage
+
+```python
+from que_media.models import Assurance
+
+value = Assurance.SERVER_MEASURED
+```
+
 
 ## Values
 

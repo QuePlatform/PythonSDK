@@ -3,33 +3,593 @@ id: a559c4f4-5ced-4888-977e-9da6df24ea1e
 management:
   docChecksum: 5be1033d3fcd17c8b64f613200c1ef01
   docVersion: 1.0.0
-  speakeasyVersion: 1.621.0
-  generationVersion: 2.707.0
-  releaseVersion: 0.1.0
-  configChecksum: e02e2d791f75a4bfe768d682325c2131
+  speakeasyVersion: 1.789.0
+  generationVersion: 2.916.2
+  releaseVersion: 0.2.0
+  configChecksum: 27898a3d742b11bf5826a03fd946fc4d
   repoURL: https://github.com/QuePlatform/PythonSDK.git
   installationURL: https://github.com/QuePlatform/PythonSDK.git
   published: true
+persistentEdits:
+  generation_id: 4f5fb273-c2a0-485c-a081-bbbdfaa7742b
+  pristine_commit_hash: c91a441bc62648968e1ffcbd9b81d27206126e22
+  pristine_tree_hash: 729377101134981fff324771e91a1830abdd8e6f
 features:
   python:
-    additionalDependencies: 1.0.0
-    constsAndDefaults: 1.0.5
-    core: 5.20.4
+    additionalDependencies: 1.1.0
+    constsAndDefaults: 1.0.7
+    core: 6.0.34
     defaultEnabledRetries: 0.2.0
     devContainers: 3.0.0
-    enumUnions: 0.1.0
-    envVarSecurityUsage: 0.3.2
+    enumUnions: 0.1.1
+    envVarSecurityUsage: 0.3.3
     flatRequests: 1.0.1
-    globalSecurity: 3.0.4
+    globalSecurity: 3.0.7
     globalSecurityCallbacks: 1.0.0
     globalSecurityFlattening: 1.0.0
-    globalServerURLs: 3.1.1
-    methodArguments: 1.0.2
-    nullables: 1.0.1
-    responseFormat: 1.0.1
-    retries: 3.0.2
-    sdkHooks: 1.1.0
-    unions: 3.0.4
+    globalServerURLs: 3.2.1
+    methodArguments: 1.1.1
+    nullables: 1.0.2
+    responseFormat: 1.1.0
+    retries: 3.0.7
+    sdkHooks: 1.3.0
+    unions: 3.1.7
+trackedFiles:
+  .devcontainer/README.md:
+    id: b170c0f184ac
+    last_write_checksum: sha1:e9207b48f06667421add741bc5baec1cfd6faea8
+    pristine_git_object: a400f2a31e859d5930a18dee092a69e93f32c3bf
+  .devcontainer/devcontainer.json:
+    id: b34062a34eb1
+    last_write_checksum: sha1:94309e8c8eab5ab063986bf625f513a59825e947
+    pristine_git_object: 75edff51e68d2934c825764459ba3071044ce2ab
+  .devcontainer/setup.sh:
+    id: 5f1dfbfeb8eb
+    last_write_checksum: sha1:234faaf21a8a7028346590d1eb3fac0429f4991c
+    pristine_git_object: b39c28c38cf46135982ab5576b4723ea777bf510
+  .gitattributes:
+    id: 24139dae6567
+    last_write_checksum: sha1:53134de3ada576f37c22276901e1b5b6d85cd2da
+    pristine_git_object: 4d75d59008e4d8609876d263419a9dc56c8d6f3a
+  .vscode/settings.json:
+    id: 89aa447020cd
+    last_write_checksum: sha1:f84632c81029fcdda8c3b0c768d02b836fc80526
+    pristine_git_object: 8d79f0abb72526f1fb34a4c03e5bba612c6ba2ae
+  USAGE.md:
+    id: 3aed33ce6e6f
+    last_write_checksum: sha1:46b63cfa296e49115098c45447dba69521c08f73
+    pristine_git_object: 83cc6ca414fc6b169e7f01e9ffc7dd7bbe3029db
+  docs/errors/problemresponseerror.md:
+    id: 661e3b5da89f
+    last_write_checksum: sha1:341a9c3155da878477e9958597a2d9208161caaf
+    pristine_git_object: ad84cd58229dce4d259eec6470581714bb50175c
+  docs/models/alg.md:
+    id: 4fb7338a681f
+    last_write_checksum: sha1:284feec984cd9cc56d0a56a61ded4afa533a192b
+    pristine_git_object: c54b580d6051a615d1c8c3ec4e7196029101fe3a
+  docs/models/assetrefdto.md:
+    id: 1ee8dd12fef8
+    last_write_checksum: sha1:cecceaee67a644a599bb937ec484c10654c642d4
+    pristine_git_object: 42d2857f4995df91ac901cc21baf0c8cde93b2df
+  docs/models/assurance.md:
+    id: 865494a67fda
+    last_write_checksum: sha1:3325f64c375466bbfcd6a0dfc6ef1cc33d2c82c1
+    pristine_git_object: b80213d63dbbd3f21fd3277cc9ffd252df3d0183
+  docs/models/cawgidentitydto.md:
+    id: 2cc47c1a93dd
+    last_write_checksum: sha1:71e1c449280529bbdfe5ca07363607e410be6066
+    pristine_git_object: 10e1a843e54caeb73a035ce1cceb92ad4c5a4db3
+  docs/models/cawgverifydto.md:
+    id: 0237f05904d3
+    last_write_checksum: sha1:6bdac03da8b7a206d1f541924dc4fa72f07c8a2a
+    pristine_git_object: e567aa302d433a46aa6db53c74aa77359d2b6339
+  docs/models/data.md:
+    id: 9a31987caf78
+    last_write_checksum: sha1:81e219299a8b7890f322be5c3db8a48db5897815
+    pristine_git_object: ba5ef429ae4e9ce345996d25c50e0375604f7af5
+  docs/models/default.md:
+    id: 5dc717c79ef2
+    last_write_checksum: sha1:2b088123de4beb56dbf1e8d116bd229ad595be8f
+    pristine_git_object: 86ea573e79ab7e7db26466589cc08dfb82e8a9da
+  docs/models/details.md:
+    id: 78f6f9d989a9
+    last_write_checksum: sha1:310eebcac8d7f0825c0f14a57c3bfe6d4f772150
+    pristine_git_object: fa0f38500a1b56be819dc646151583aca2c472a7
+  docs/models/evidence.md:
+    id: 9709dc7c452c
+    last_write_checksum: sha1:7c805fe0af63b9352824048a37a276b3f11d24f7
+    pristine_git_object: d64f1f60ceee01e03a39e13d9802d8dfc7eacc2e
+  docs/models/getpresignedurlresponse.md:
+    id: fc0b0204491d
+    last_write_checksum: sha1:d0fdf3d00d6359fe55856b7ac5bed114c155c694
+    pristine_git_object: 7fdb5775b326c8acc80ed1b4e0d23acb3a81d1fa
+  docs/models/gettrustlistresponse.md:
+    id: 9aa46476d2f6
+    last_write_checksum: sha1:976b4581db8847de70bf8d6a07034269111176a7
+    pristine_git_object: e3845c3a12b4b4f236ff8f02db25880217afacdd
+  docs/models/healthzresponse.md:
+    id: a677853499c3
+    last_write_checksum: sha1:7c33521e423e9e080cf5180d748785a294e92511
+    pristine_git_object: 37647a133b954099da9f5535867b8886b8a8764c
+  docs/models/limitsdto.md:
+    id: daadd47cab94
+    last_write_checksum: sha1:deea65b9e7a55ea699d6c3913c8d35feb8da0562
+    pristine_git_object: 25b3d3243d81248690e0162ec884397e308de104
+  docs/models/mode.md:
+    id: 568581cb28bc
+    last_write_checksum: sha1:f321ffe3d9d4c1c062377991aafb220e6197553c
+    pristine_git_object: e3efd455c8b1b7a27d195275967a39126447dd38
+  docs/models/policy.md:
+    id: c32c4f30cd71
+    last_write_checksum: sha1:b8a91ee5d4e180bf73f58f6222b9c6d51d6c38d8
+    pristine_git_object: 54c013f84ce5d8d3e002e8a4f27a0348c073ccb5
+  docs/models/presignedurl.md:
+    id: d2a584309fe2
+    last_write_checksum: sha1:c8aec43ffad49cd347440450ae25c1e3027d06c2
+    pristine_git_object: e659296f0866efde5603481bece90556f28f518f
+  docs/models/presignresponse.md:
+    id: b8f4ec87d3f5
+    last_write_checksum: sha1:1bee7b68c83cfdd79cf5bd00b6797f3255b6783d
+    pristine_git_object: 8891cd78ddccfe0d39f92db4d18b775cb77c4b89
+  docs/models/s3.md:
+    id: 71b71520583e
+    last_write_checksum: sha1:fde26250f0486784527fc627a1851183e9c9a2f8
+    pristine_git_object: cfa1102a7408e8858f7f0cc5975abf9ef99cd7f5
+  docs/models/security.md:
+    id: 452e4d4eb67a
+    last_write_checksum: sha1:71fdd7bbeb4eccce70c9b87e9631d708571e0f17
+    pristine_git_object: 0346db068b3d37366beee9c844a3643d6a332cee
+  docs/models/signassetresponse.md:
+    id: 7b6de1d34a77
+    last_write_checksum: sha1:4f2022c608e8c043284c47829c52b8eec043e351
+    pristine_git_object: ef2c1d0c5cf6b0472927ca39dda3d0134ca2f5f2
+  docs/models/signer.md:
+    id: fb7890dac215
+    last_write_checksum: sha1:255d53e5516850185532c692e4b8bc13d18fdba5
+    pristine_git_object: ef763a3f5efb23fc1d8823f6a0425e31c91bacc4
+  docs/models/signerrefdto.md:
+    id: 885037d9c9ca
+    last_write_checksum: sha1:664b1aa9a4c24f564d6c0a7b05a888354bcd458b
+    pristine_git_object: e3bf7455782157bea82ae0a8356e2df3f799b805
+  docs/models/signerrefdtoenv.md:
+    id: c2b267e63c21
+    last_write_checksum: sha1:4681665cc056d8821248b906746258015d032626
+    pristine_git_object: b30a0dd514720983964f9636daf9c4a798b6b81c
+  docs/models/signerrefdtolocal.md:
+    id: af746fc572c4
+    last_write_checksum: sha1:ec25517baadf85dc04d5bdca23804e6372078fcf
+    pristine_git_object: 59b4ed39db8d8a80665df5ce56aed38a858e5c78
+  docs/models/signerseparate.md:
+    id: cb957d490111
+    last_write_checksum: sha1:df9ffe8a86803481ea0e3f8d76485f04683dd9af
+    pristine_git_object: ad2c6fbdaf2c41dc7c8e78ce4cb8f432d89a99a8
+  docs/models/signerusemainsigner.md:
+    id: 9afe1ad10919
+    last_write_checksum: sha1:21a42ac7c36074e3f01ea1917b7ac14e915441ea
+    pristine_git_object: c07a37fc440ca21e0f3cafdb02d0c3119570b521
+  docs/models/signingalg.md:
+    id: 0fd03af1e548
+    last_write_checksum: sha1:0f34f814018f5c74b498aa1d4b36152884ab2674
+    pristine_git_object: e3a4e43a1cd6a3abb1ca16df5126a2247af8e5db
+  docs/models/signrequest.md:
+    id: f41403143971
+    last_write_checksum: sha1:df0746af87679ac55e1dc9f1ca5de7c1f8fbe10b
+    pristine_git_object: 9b2ed060c6740ee1b3f05a5d23d9de374fdc945d
+  docs/models/signresponse.md:
+    id: 404c2d0172a4
+    last_write_checksum: sha1:73b889bc0f402799743c565327b4644a84aa7f5e
+    pristine_git_object: f3e7314dae5f0bfc556a5809e0dfaba5755b501d
+  docs/models/trustlistresponse.md:
+    id: f78b8227e948
+    last_write_checksum: sha1:393e0e4fc52da8e0ffda75dcfb64d5b864364205
+    pristine_git_object: d3231aeb043944bfe0322b5afebcab3c8b1d369b
+  docs/models/typeenv.md:
+    id: a0b33aca378f
+    last_write_checksum: sha1:aa9459742e67710dcb3921d1ae92a9e5707e8a31
+    pristine_git_object: 8350861c075cd189252d109d58b0c380e9b6cd27
+  docs/models/typelocal.md:
+    id: 390026b1074c
+    last_write_checksum: sha1:8deadb17baec67a24267152fc7538caf8d4a6428
+    pristine_git_object: 5d2f4051392ba796bd47e839f095f8e30ad8d345
+  docs/models/typeseparate.md:
+    id: 72dd51c8e7c4
+    last_write_checksum: sha1:ce69bbd7287903f4804ead5991d061c7e0c870ad
+    pristine_git_object: fafd98a18e26adf68475e3538c122f2681252b77
+  docs/models/typeusemainsigner.md:
+    id: d770fac498ba
+    last_write_checksum: sha1:5126550a2861744dcb574e962602b22e66f65d1c
+    pristine_git_object: 30b9a8601bfddfdbf9edc94c85a5a0a070f48ad9
+  docs/models/utils/retryconfig.md:
+    id: 4343ac43161c
+    last_write_checksum: sha1:562c0f21e308ad10c27f85f75704c15592c6929d
+    pristine_git_object: 69dd549ec7f5f885101d08dd502e25748183aebf
+  docs/models/verifyassetresponse.md:
+    id: 83e9604edaa7
+    last_write_checksum: sha1:6763b1dab2577990cf9a8f341b99003c07dfea2e
+    pristine_git_object: d1549340f63a2fdce049c4588bb1825b8521ed49
+  docs/models/verifyrequest.md:
+    id: 125ae557feeb
+    last_write_checksum: sha1:f43a535d122cc114cf839f966bbc08249c116f2a
+    pristine_git_object: eb049a902cb8f4886ae4feda09f500b6d56c0860
+  docs/models/verifyresponse.md:
+    id: e89110bcedac
+    last_write_checksum: sha1:528f62476b540381c0c304420aa044e24860ad7a
+    pristine_git_object: 390a903e80f514f2d0b8f905fbe2e77cf999cae5
+  docs/sdks/assetmanagement/README.md:
+    id: 0d073009d093
+    last_write_checksum: sha1:9af37a3d4c4a3a7eda0aff7fda36837d14291c62
+    pristine_git_object: fb369279321fd4e5deb460bc00754e0e0d2a2617
+  docs/sdks/que/README.md:
+    id: 10be3e19316d
+    last_write_checksum: sha1:ff78943d955c51700eec0bb24dd391715fd7219d
+    pristine_git_object: 03ea03fd306273f5963c48ee43dfeee123b083cf
+  docs/sdks/utility/README.md:
+    id: acc49cb73a09
+    last_write_checksum: sha1:89c7a00a47e21c2260915000e5039ad89b4904f0
+    pristine_git_object: 434d6ebd24f5011016d75bbce168beab52d96b0c
+  py.typed:
+    id: 258c3ed47ae4
+    last_write_checksum: sha1:8efc425ffe830805ffcc0f3055871bdcdc542c60
+    pristine_git_object: 3e38f1a929f7d6b1d6de74604aa87e3d8f010544
+  pylintrc:
+    id: 7ce8b9f946e6
+    last_write_checksum: sha1:fc254fc871c3accee75f03e3f71307f7a894235b
+    pristine_git_object: fde5e0418e98324b2b3b2a8e02559e575b2f6cfa
+  pyproject.toml:
+    id: 5d07e7d72637
+    last_write_checksum: sha1:892719f3ad3e0792a2ec0a3186db7b878fe23467
+    pristine_git_object: 30da70837cd144c6e43272e190ca263f9e1842ab
+  scripts/prepare_readme.py:
+    id: e0c5957a6035
+    last_write_checksum: sha1:985c5486e6f626913979b0a8a777a4d0b657eb63
+    pristine_git_object: cac943f9401fca9784679dc2872e59492456b233
+  scripts/publish.sh:
+    id: fe273b08f514
+    last_write_checksum: sha1:b290b25b36dca3d5eb1a2e66a2e1bcf2e7326cf3
+    pristine_git_object: c35748f360329c2bc370e9b189f49b1a360b2c48
+  src/que_media/__init__.py:
+    id: 8cf8ed49c11a
+    last_write_checksum: sha1:da077c0bdfcef64a4a5aea91a17292f72fa2b088
+    pristine_git_object: 833c68cd526fe34aab2b7e7c45f974f7f4b9e120
+  src/que_media/_hooks/__init__.py:
+    id: a6921c559c94
+    last_write_checksum: sha1:45a380490e968d8d95994dd97554ac60eeb6ae60
+    pristine_git_object: e763be4b171bbcf9c16caeaf381f8c92ce8d8e6e
+  src/que_media/_hooks/sdkhooks.py:
+    id: 789e45e415b2
+    last_write_checksum: sha1:8888b40db8a4b278767e82c296770c02f797dca1
+    pristine_git_object: f2a823d22c1b56022a1f000e8ae068a829ce131d
+  src/que_media/_hooks/types.py:
+    id: 03005f66a62b
+    last_write_checksum: sha1:17d95feb4f163b88f5de5bed359a8325a71e5c7c
+    pristine_git_object: cf5eb5a8d7dc17567604ce38b786dfc32cfbdef9
+  src/que_media/_version.py:
+    id: c093b951292f
+    last_write_checksum: sha1:bb7978d86e760c93eba8ab26248ca28b4b95b6cc
+    pristine_git_object: 5cd66d13ba1c7a903c9d8dc4ee3ddde3d49828b7
+  src/que_media/asset_management.py:
+    id: 6d71a63574b1
+    last_write_checksum: sha1:116cdbdb3d38e33aba9232620a0c2a5624d0ee8a
+    pristine_git_object: c95c4df91024230c690d52a6974ce58eaa26d9be
+  src/que_media/basesdk.py:
+    id: 7b9ff9ef5c53
+    last_write_checksum: sha1:3c024e35be2b9d349a5a0392694b3beca2ef5b8c
+    pristine_git_object: 7c3292ce6bdad227057b7b008d040406f35aa08b
+  src/que_media/errors/__init__.py:
+    id: 981e226fd06e
+    last_write_checksum: sha1:b3e20e14b624c8f8ca0e00fe1df8d888261c737b
+    pristine_git_object: c7ac85294c4785786fd50bb0ff3ae3b9eb1c9f1e
+  src/que_media/errors/no_response_error.py:
+    id: 77698b66befb
+    last_write_checksum: sha1:7f326424a7d5ae1bcd5c89a0d6b3dbda9138942f
+    pristine_git_object: 1deab64bc43e1e65bf3c412d326a4032ce342366
+  src/que_media/errors/problemresponse_error.py:
+    id: 571e18e0c61c
+    last_write_checksum: sha1:fd24e69f6bbfe10d50e6823233e074eec7122a11
+    pristine_git_object: a91eb08cbb119bc7cd50f57d6f6329c7e05848df
+  src/que_media/errors/quedefaulterror.py:
+    id: 4d7c19863d1f
+    last_write_checksum: sha1:7d3c9d9a2dc7da60664339373d108933278e1b20
+    pristine_git_object: a66c3aaa98d96ac09e9533823e6eea85253a2fc1
+  src/que_media/errors/queerror.py:
+    id: 14d18195490b
+    last_write_checksum: sha1:d44fa50db8937649b98ea66352e5982a3de218ba
+    pristine_git_object: 9f49c9a795be381f4d8234141537fb35afff7a22
+  src/que_media/errors/responsevalidationerror.py:
+    id: 2a10e8c2d2c5
+    last_write_checksum: sha1:abfedc6eeccdc7837a436e0bac66770789dfe860
+    pristine_git_object: 6bfc1713b1e9c0ecf065ed5cdbdf90544783a45b
+  src/que_media/httpclient.py:
+    id: 6ade92bcd84b
+    last_write_checksum: sha1:5e55338d6ee9f01ab648cad4380201a8a3da7dd7
+    pristine_git_object: 89560b566073785535643e694c112bedbd3db13d
+  src/que_media/models/__init__.py:
+    id: ef2495b1e8ec
+    last_write_checksum: sha1:7286e21485e5807695d3ea338320b4e3aaa09eda
+    pristine_git_object: 2be477eaf09731d67e376a8dab474c0b2443976c
+  src/que_media/models/assetrefdto.py:
+    id: edf079500cb6
+    last_write_checksum: sha1:2f9b4a1e30927465a56c4989d98e4da542194092
+    pristine_git_object: 5d90cc05c7bb473d26f995ffd3ffab8021559e76
+  src/que_media/models/cawgidentitydto.py:
+    id: 52160fe80105
+    last_write_checksum: sha1:52692222e4abf095e6c9ec87622121997e928283
+    pristine_git_object: fd01fa5eb9a5b6bc827b6a362c36130f8c11893a
+  src/que_media/models/cawgverifydto.py:
+    id: 1f136d5f3776
+    last_write_checksum: sha1:4502e1a66016fc524dedadb3d9e47ad5267c792c
+    pristine_git_object: 3afec993d5acb70f07fd0abd42eb76af917a3a14
+  src/que_media/models/getpresignedurlop.py:
+    id: c5d2f5db98fe
+    last_write_checksum: sha1:3a8464a6be6bbb40fac433445493a7e21ad57393
+    pristine_git_object: 2bd727a83abd550cac58e55570cc82a68b64b2e6
+  src/que_media/models/gettrustlistop.py:
+    id: a2b6724177fb
+    last_write_checksum: sha1:c7f1e760b56f2de452655a5d32acafc8db0e517d
+    pristine_git_object: e9523e95e80e23ba07687ca3fd6deba90f35d678
+  src/que_media/models/healthzresponse.py:
+    id: 67971b29717b
+    last_write_checksum: sha1:76e719a574f778620d0accba33365634957cfa0b
+    pristine_git_object: a6aea5c7c16b38bad5a01fd53570cc2b8b465f8e
+  src/que_media/models/limitsdto.py:
+    id: d945a61d4904
+    last_write_checksum: sha1:da4f097715c71f9372b140a88e94fbbf1906f0ca
+    pristine_git_object: 5608089b93b3e408e414eca2a5a37ce195f1e379
+  src/que_media/models/presignedurl.py:
+    id: d4fec694d0d1
+    last_write_checksum: sha1:9bfd8c3b81da8299ed865a9ea882d8117afd91bd
+    pristine_git_object: 2d13f43dcfd9104126ed0845ef097f5c62e92bf3
+  src/que_media/models/presignresponse.py:
+    id: cef841d26619
+    last_write_checksum: sha1:735547297524f37892b67db58f658db5dc81ca87
+    pristine_git_object: 1fde3d1efa8a6f12321d40e1dc56ecb394f44d22
+  src/que_media/models/problemresponse_error.py:
+    id: 36f6929136a6
+    last_write_checksum: sha1:8d42b738d37d14a2a9d83aea25374d424ec18900
+    pristine_git_object: 61a3747ab01adcfd70f8271a9f0eacbbb9a772ec
+  src/que_media/models/s3.py:
+    id: f8c23fcb9d1e
+    last_write_checksum: sha1:6de250da2b648b1499d881917c24d462b9522045
+    pristine_git_object: 987abf195aa26027eec4bfdb03958942b1e050b8
+  src/que_media/models/security.py:
+    id: a42160e389a5
+    last_write_checksum: sha1:7eb1db9a23b1ff39bd2f6415e6693eb495080444
+    pristine_git_object: 2736a719233e8f445685acd8842e3cb7eeab89e9
+  src/que_media/models/signassetop.py:
+    id: 72465010d259
+    last_write_checksum: sha1:a1f0b808f2ef960c0ebb3b8ce221c81836d61ebd
+    pristine_git_object: c67c246c3b19197b11b8f725c29b66b6a6d63860
+  src/que_media/models/signerrefdto.py:
+    id: d20bf5890ae6
+    last_write_checksum: sha1:fdad2e9fefe12a73dd60500f702e1df03f74826d
+    pristine_git_object: bab9761b7f49f2b0db5f84c266490f55d667a4f9
+  src/que_media/models/signrequest.py:
+    id: 0d5f53f36a88
+    last_write_checksum: sha1:c17f230c29e6bb383e11d142e5d0104ef616fb4f
+    pristine_git_object: 2efc0402a0916c4cafde71c7301cb141732069af
+  src/que_media/models/signresponse.py:
+    id: e24865c900fe
+    last_write_checksum: sha1:1dbcd4739b4a827e4b5c45dd6335e4a83d6e2a89
+    pristine_git_object: 44f98fb87127b022947685e3886419c9853300e0
+  src/que_media/models/trustlistresponse.py:
+    id: 3bd70267390c
+    last_write_checksum: sha1:e5a8b76724707635e1aa3a08c4b236cef179358a
+    pristine_git_object: 0500b03049bf1b8d70d8b88d642a8ce1c682118b
+  src/que_media/models/verifyassetop.py:
+    id: 519fd81c83c6
+    last_write_checksum: sha1:0316565a5e58c9e8c57e019dc2c47ad9edb573a2
+    pristine_git_object: 354e2db9c88cebd9f48a5fdcefa95207ce9c0278
+  src/que_media/models/verifyrequest.py:
+    id: 8c63ea650731
+    last_write_checksum: sha1:050ef1408863842889d6f0d880af5ff08e3b17e9
+    pristine_git_object: b0b87d370492d0a8ab77a07c50d2289958dab0e2
+  src/que_media/models/verifyresponse.py:
+    id: ceabcdbe7df5
+    last_write_checksum: sha1:4030b37b3dda7059ff51ebb434db96cf64abe696
+    pristine_git_object: 02106bcda0ea28858b4539b21d02a703b38d52cf
+  src/que_media/py.typed:
+    id: af0c987cff00
+    last_write_checksum: sha1:8efc425ffe830805ffcc0f3055871bdcdc542c60
+    pristine_git_object: 3e38f1a929f7d6b1d6de74604aa87e3d8f010544
+  src/que_media/sdk.py:
+    id: e0bae8d10871
+    last_write_checksum: sha1:8f6b04c236416cf6f7cc27a403b824809b51bbfa
+    pristine_git_object: 99a93a14d42bf6d3cfcc784a827fab9edc55f225
+  src/que_media/sdkconfiguration.py:
+    id: 313ccf693979
+    last_write_checksum: sha1:32520280d87157fc4c5e36094a0c171f8519940d
+    pristine_git_object: 6e7f4aa43212a1067fe6821ddb84be2d134bec55
+  src/que_media/types/__init__.py:
+    id: 703f87d06c9b
+    last_write_checksum: sha1:f9ad14217f832e74f594285960125add50324be9
+    pristine_git_object: faa268137bc01c9d08cfadc4797017db48747a96
+  src/que_media/types/base64fileinput.py:
+    id: 46c7ac926e70
+    last_write_checksum: sha1:1522687ae3398374c35710cad993a6e82b5ab99d
+    pristine_git_object: 862566fe2b1db830276b390e136e65090e5963d2
+  src/que_media/types/basemodel.py:
+    id: 602c7f4e973f
+    last_write_checksum: sha1:10d84aedeb9d35edfdadf2c3020caa1d24d8b584
+    pristine_git_object: a9a640a1a7048736383f96c67c6290c86bf536ee
+  src/que_media/utility.py:
+    id: 59f517875307
+    last_write_checksum: sha1:36c257da78ed028b9be6cb2bf5dfa65ee0be8602
+    pristine_git_object: 39d737ecb9d514794fb3c99a253aed0a7c98a355
+  src/que_media/utils/__init__.py:
+    id: 5f2ee6888d6e
+    last_write_checksum: sha1:527db7a6c93948ecdec6a33f56b6551ae44f0180
+    pristine_git_object: c48a36ca3d6e47e384b133bc0bcb482c6d8589b9
+  src/que_media/utils/annotations.py:
+    id: 1905a87da58b
+    last_write_checksum: sha1:a4824ad65f730303e4e1e3ec1febf87b4eb46dbc
+    pristine_git_object: 12e0aa4f1151bb52474cc02e88397329b90703f6
+  src/que_media/utils/datetimes.py:
+    id: ceae85b691da
+    last_write_checksum: sha1:fa47d54c549ff9b95496ce91930fadfb04a36be9
+    pristine_git_object: adad24762cf452d137abe94fda0fd26224cef593
+  src/que_media/utils/dynamic_imports.py:
+    id: 1906e5114220
+    last_write_checksum: sha1:a1940c63feb8eddfd8026de53384baf5056d5dcc
+    pristine_git_object: 673edf82a97d0fea7295625d3e092ea369a36b79
+  src/que_media/utils/enums.py:
+    id: 7697f72dd8b4
+    last_write_checksum: sha1:bc8c3c1285ae09ba8a094ee5c3d9c7f41fa1284d
+    pristine_git_object: 3324e1bc2668c54c4d5f5a1a845675319757a828
+  src/que_media/utils/eventstreaming.py:
+    id: 02d07b31740f
+    last_write_checksum: sha1:7d1dc68f8b48486ab646653aa05cc38752e1f912
+    pristine_git_object: a8d4fe5cc88d3c7337339e1b36a61bbf7ca8c4eb
+  src/que_media/utils/forms.py:
+    id: 388b832d4e37
+    last_write_checksum: sha1:a971cdb120ad3d416d296d5d0ad89e4808350a7f
+    pristine_git_object: fdf0dc9b2a67bca773eefe6b471498cccaa83424
+  src/que_media/utils/headers.py:
+    id: 8323a4731b6f
+    last_write_checksum: sha1:7c6df233ee006332b566a8afa9ce9a245941d935
+    pristine_git_object: 37864cbbbc40d1a47112bbfdd3ba79568fc8818a
+  src/que_media/utils/logger.py:
+    id: fcdd505c7963
+    last_write_checksum: sha1:6ed3ef58f713b8a3716274f8c3d2019b28ded79a
+    pristine_git_object: 6d41759a8abb733b404ca1fdf490dfad77391f09
+  src/que_media/utils/metadata.py:
+    id: a4a31fc1a000
+    last_write_checksum: sha1:e703e5cbb5255144aacf86898d1420529afaaff8
+    pristine_git_object: 5abddd588837ac297050ca3b543627faadb350a9
+  src/que_media/utils/queryparams.py:
+    id: a83d542489f3
+    last_write_checksum: sha1:b94c3f314fd3da0d1d215afc2731f48748e2aa59
+    pristine_git_object: c04e0db82b68eca041f2cb2614d748fbac80fd41
+  src/que_media/utils/requestbodies.py:
+    id: 68d170708a17
+    last_write_checksum: sha1:e1fef575283b7fe7fe2ad392dbbb3fb105309124
+    pristine_git_object: 591415af8e64baa410627b507d2740afb5387d13
+  src/que_media/utils/retries.py:
+    id: 20d1718bcdb3
+    last_write_checksum: sha1:3585b891142f30a597fbf7a2f0340700babef8e4
+    pristine_git_object: ca7b59efebbbd9545744d0207ef42725c4cc5143
+  src/que_media/utils/security.py:
+    id: ae6be28ff290
+    last_write_checksum: sha1:53e219f0b75b3baea5819d5be54bcc822e727aad
+    pristine_git_object: 393ab54c8bc963c5822473976b56395b0a21985e
+  src/que_media/utils/serializers.py:
+    id: 6c87b246fec6
+    last_write_checksum: sha1:7485f1425b0661fd84836186570df90207eec6af
+    pristine_git_object: 1031ed930bad5ece220cf7416a56c29f40f0588b
+  src/que_media/utils/unmarshal_json_response.py:
+    id: 61330142b5af
+    last_write_checksum: sha1:ae012e019b181659f9f54b6f66fbf099bf331fd8
+    pristine_git_object: 75637bb2f9bfa9a8045582e6a833c9e5c63df975
+  src/que_media/utils/url.py:
+    id: e69e4e54bad7
+    last_write_checksum: sha1:6479961baa90432ca25626f8e40a7bbc32e73b41
+    pristine_git_object: c78ccbae426ce6d385709d97ce0b1c2813ea2418
+  src/que_media/utils/values.py:
+    id: fcddf865269e
+    last_write_checksum: sha1:acaa178a7c41ddd000f58cc691e4632d925b2553
+    pristine_git_object: dae01a44384ac3bc13ae07453a053bf6c898ebe3
+examples:
+  verifyAsset:
+    speakeasy-default-verify-asset:
+      requestBody:
+        application/json: {"asset": {"url": "https://example.com/images/provenance-image.jpg"}, "mode": "detailed", "allow_remote_manifests": false, "allow_insecure_remote_http": false, "include_certificates": true, "limits": {"max_asset_size_bytes": 104857600, "max_output_size_bytes": 104857600, "max_stream_copy_bytes": 104857600, "stream_timeout_ms": 30000}}
+      responses:
+        "200":
+          application/json: {"report": "<value>"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    basic-verification:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/photo.jpg"}, "mode": "summary", "allow_remote_manifests": false, "allow_insecure_remote_http": false, "include_certificates": true}
+      responses:
+        "200":
+          application/json: {"report": "<value>"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    detailed-verification:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/document.pdf"}, "mode": "detailed", "allow_remote_manifests": true, "allow_insecure_remote_http": false, "include_certificates": true, "limits": {"max_asset_size_bytes": 52428800}}
+      responses:
+        "200":
+          application/json: {"report": "<value>"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+  signAsset:
+    speakeasy-default-sign-asset:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/user123/asset.jpg"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Original Photograph\",\"format\":\"image/jpeg\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"Jane Photographer\"}]}}]}", "allow_insecure_remote_http": false, "limits": {"max_asset_size_bytes": 104857600, "max_output_size_bytes": 104857600, "max_stream_copy_bytes": 104857600, "stream_timeout_ms": 30000}}
+      responses:
+        "200":
+          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    basic-signing:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/photo.jpg"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Original Photograph\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"Jane Photographer\"}]}}]}", "allow_insecure_remote_http": false}
+      responses:
+        "200":
+          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+    advanced-signing:
+      requestBody:
+        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/document.pdf"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Signed Document\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"John Author\"}]}}]}", "allow_insecure_remote_http": false, "limits": {"max_asset_size_bytes": 104857600, "stream_timeout_ms": 60000}}
+      responses:
+        "200":
+          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
+        "400":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+  getHealthCheck:
+    speakeasy-default-get-health-check:
+      responses:
+        "200":
+          application/json: {"status": "healthy", "message": "Que API is running", "timestamp": 1755802800}
+  getTrustList:
+    speakeasy-default-get-trust-list:
+      responses:
+        "200":
+          application/json: {"version": "dev-1", "issued_at": "2024-01-15T10:00:00Z", "data": {"manufacturers": [], "cas": [], "policy": {"default": "allow"}}}
+        "401":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+  getPresignedUrl:
+    speakeasy-default-get-presigned-url:
+      responses:
+        "200":
+          application/json: {"url": "https://que-assets-dev.s3.us-east-2.amazonaws.com/uploads/user123/asset.jpg?AWSAccessKeyId=...&Signature=...&Expires=...", "key": "uploads/user123/asset.jpg"}
+        "401":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "429":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+        "500":
+          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
+examplesVersion: 1.0.2
 generatedFiles:
   - .devcontainer/README.md
   - .devcontainer/devcontainer.json
@@ -142,107 +702,3 @@ generatedFiles:
   - src/que_media/utils/unmarshal_json_response.py
   - src/que_media/utils/url.py
   - src/que_media/utils/values.py
-examples:
-  verifyAsset:
-    speakeasy-default-verify-asset:
-      requestBody:
-        application/json: {"asset": {"url": "https://example.com/images/provenance-image.jpg"}, "mode": "detailed", "allow_remote_manifests": false, "allow_insecure_remote_http": false, "include_certificates": true, "limits": {"max_asset_size_bytes": 104857600, "max_output_size_bytes": 104857600, "max_stream_copy_bytes": 104857600, "stream_timeout_ms": 30000}}
-      responses:
-        "200":
-          application/json: {"report": "<value>"}
-        "400":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-    basic-verification:
-      requestBody:
-        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/photo.jpg"}, "mode": "summary", "allow_remote_manifests": false, "allow_insecure_remote_http": false, "include_certificates": true}
-      responses:
-        "200":
-          application/json: {"report": "<value>"}
-        "400":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-    detailed-verification:
-      requestBody:
-        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/document.pdf"}, "mode": "detailed", "allow_remote_manifests": true, "allow_insecure_remote_http": false, "include_certificates": true, "limits": {"max_asset_size_bytes": 52428800}}
-      responses:
-        "200":
-          application/json: {"report": "<value>"}
-        "400":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-  signAsset:
-    speakeasy-default-sign-asset:
-      requestBody:
-        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/user123/asset.jpg"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Original Photograph\",\"format\":\"image/jpeg\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"Jane Photographer\"}]}}]}", "allow_insecure_remote_http": false, "limits": {"max_asset_size_bytes": 104857600, "max_output_size_bytes": 104857600, "max_stream_copy_bytes": 104857600, "stream_timeout_ms": 30000}}
-      responses:
-        "200":
-          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
-        "400":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-    basic-signing:
-      requestBody:
-        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/photo.jpg"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Original Photograph\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"Jane Photographer\"}]}}]}", "allow_insecure_remote_http": false}
-      responses:
-        "200":
-          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
-        "400":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-    advanced-signing:
-      requestBody:
-        application/json: {"asset": {"bucket": "que-assets-dev", "key": "uploads/document.pdf"}, "mode": "server_measure", "manifest_json": "{\"title\":\"Signed Document\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"John Author\"}]}}]}", "allow_insecure_remote_http": false, "limits": {"max_asset_size_bytes": 104857600, "stream_timeout_ms": 60000}}
-      responses:
-        "200":
-          application/json: {"assurance": "server_measured", "evidence": {"signer": "env_dev", "alg": "ES256"}, "asset_s3_uri": "s3://que-signed-assets/uuid/signed.jpg"}
-        "400":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-  getHealthCheck:
-    speakeasy-default-get-health-check:
-      responses:
-        "200":
-          application/json: {"status": "healthy", "message": "Que API is running", "timestamp": 1755802800}
-  getTrustList:
-    speakeasy-default-get-trust-list:
-      responses:
-        "200":
-          application/json: {"version": "dev-1", "issued_at": "2024-01-15T10:00:00Z", "data": {"manufacturers": [], "cas": [], "policy": {"default": "allow"}}}
-        "401":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-  getPresignedUrl:
-    speakeasy-default-get-presigned-url:
-      responses:
-        "200":
-          application/json: {"url": "https://que-assets-dev.s3.us-east-2.amazonaws.com/uploads/user123/asset.jpg?AWSAccessKeyId=...&Signature=...&Expires=...", "key": "uploads/user123/asset.jpg"}
-        "401":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "429":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-        "500":
-          application/problem+json: {"type": "about:blank", "title": "rate_limited", "status": 429, "code": "rate_limited", "detail": "try again in 5000 ms", "details": {}}
-examplesVersion: 1.0.2
-releaseNotes: "## Python SDK Changes Detected:\n* `que.verify_asset()`: \n  *  `request` **Changed** **Breaking** :warning:\n  *  `response.report` **Changed** **Breaking** :warning:\n* `que.sign_asset()`: \n  *  `request` **Changed** **Breaking** :warning:\n  *  `response` **Changed** **Breaking** :warning:\n* `que.utility.get_trust_list()`:  `response.data.policy.default` **Changed** **Breaking** :warning:\n"

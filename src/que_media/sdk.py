@@ -70,8 +70,8 @@ class Que(BaseSDK):
         ] = None,
         environment: Optional[str] = None,
         server_idx: Optional[int] = None,
-        server_url: Optional[str] = None,
         url_params: Optional[Dict[str, str]] = None,
+        server_url: Optional[str] = None,
         client: Optional[HttpClient] = None,
         async_client: Optional[AsyncHttpClient] = None,
         retry_config: OptionalNullable[RetryConfig] = UNSET,
@@ -92,7 +92,7 @@ class Que(BaseSDK):
         """
         client_supplied = True
         if client is None:
-            client = httpx.Client()
+            client = httpx.Client(follow_redirects=True)
             client_supplied = False
 
         assert issubclass(
@@ -101,7 +101,7 @@ class Que(BaseSDK):
 
         async_client_supplied = True
         if async_client is None:
-            async_client = httpx.AsyncClient()
+            async_client = httpx.AsyncClient(follow_redirects=True)
             async_client_supplied = False
 
         if debug_logger is None:
@@ -112,7 +112,9 @@ class Que(BaseSDK):
         ), "The provided async_client must implement the AsyncHttpClient protocol."
 
         security: Any = None
-        if callable(api_key_auth):
+        if api_key_auth is None:
+            security = None
+        elif callable(api_key_auth):
             # pylint: disable=unnecessary-lambda-assignment
             security = lambda: models.Security(api_key_auth=api_key_auth())
         else:
@@ -247,7 +249,12 @@ class Que(BaseSDK):
 
 
         :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
-        :param mode: The level of detail to return in the verification report. * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation. * `info`: Basic information about the manifest, claims, and signing entities. * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps. * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
+        :param mode: The level of detail to return in the verification report.
+            * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation.
+            * `info`: Basic information about the manifest, claims, and signing entities.
+            * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps.
+            * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
+
         :param allow_remote_manifests: Whether to allow fetching and validating remote manifests referenced in the asset's C2PA data.
         :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs when fetching remote manifest resources. Disabled by default for security.
         :param include_certificates: Whether to include full certificate chains and cryptographic details in the verification report.
@@ -294,6 +301,7 @@ class Que(BaseSDK):
             get_serialized_body=lambda: utils.serialize_request_body(
                 request, False, False, "json", models.VerifyRequest
             ),
+            allow_empty_value=None,
             timeout_ms=timeout_ms,
         )
 
@@ -310,13 +318,15 @@ class Que(BaseSDK):
                 config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="verifyAsset",
-                oauth2_scopes=[],
+                oauth2_scopes=None,
                 security_source=get_security_from_env(
                     self.sdk_configuration.security, models.Security
                 ),
+                tags=None,
+                extensions=None,
             ),
             request=req,
-            error_status_codes=["400", "401", "403", "422", "429", "4XX", "500", "5XX"],
+            is_error_status_code=lambda c: utils.match_status_codes(["4XX", "5XX"], c),
             retry_config=retry_config,
         )
 
@@ -377,7 +387,12 @@ class Que(BaseSDK):
 
 
         :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
-        :param mode: The level of detail to return in the verification report. * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation. * `info`: Basic information about the manifest, claims, and signing entities. * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps. * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
+        :param mode: The level of detail to return in the verification report.
+            * `summary`: A high-level pass/fail result with basic trust status. Fastest option for simple validation.
+            * `info`: Basic information about the manifest, claims, and signing entities.
+            * `detailed`: Comprehensive details of all assertions, claims, signatures, and validation steps.
+            * `tree`: Hierarchical view of the manifest's ingredient relationships and provenance chain.
+
         :param allow_remote_manifests: Whether to allow fetching and validating remote manifests referenced in the asset's C2PA data.
         :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs when fetching remote manifest resources. Disabled by default for security.
         :param include_certificates: Whether to include full certificate chains and cryptographic details in the verification report.
@@ -424,6 +439,7 @@ class Que(BaseSDK):
             get_serialized_body=lambda: utils.serialize_request_body(
                 request, False, False, "json", models.VerifyRequest
             ),
+            allow_empty_value=None,
             timeout_ms=timeout_ms,
         )
 
@@ -440,13 +456,15 @@ class Que(BaseSDK):
                 config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="verifyAsset",
-                oauth2_scopes=[],
+                oauth2_scopes=None,
                 security_source=get_security_from_env(
                     self.sdk_configuration.security, models.Security
                 ),
+                tags=None,
+                extensions=None,
             ),
             request=req,
-            error_status_codes=["400", "401", "403", "422", "429", "4XX", "500", "5XX"],
+            is_error_status_code=lambda c: utils.match_status_codes(["4XX", "5XX"], c),
             retry_config=retry_config,
         )
 
@@ -506,7 +524,10 @@ class Que(BaseSDK):
 
 
         :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
-        :param mode: The signing mode to use. * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode. * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
+        :param mode: The signing mode to use.
+            * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode.
+            * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
+
         :param manifest_json: JSON string containing the manifest to embed in the asset as a C2PA claim. This defines the provenance information and assertions about the asset. Required when `mode` is `server_measure`.
         :param cawg: Configuration to add a CAWG identity assertion during signing. Presence of this object enables CAWG.
         :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs for remote manifest resources. Disabled by default for security.
@@ -551,6 +572,7 @@ class Que(BaseSDK):
             get_serialized_body=lambda: utils.serialize_request_body(
                 request, False, False, "json", models.SignRequest
             ),
+            allow_empty_value=None,
             timeout_ms=timeout_ms,
         )
 
@@ -567,13 +589,15 @@ class Que(BaseSDK):
                 config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="signAsset",
-                oauth2_scopes=[],
+                oauth2_scopes=None,
                 security_source=get_security_from_env(
                     self.sdk_configuration.security, models.Security
                 ),
+                tags=None,
+                extensions=None,
             ),
             request=req,
-            error_status_codes=["400", "401", "403", "422", "429", "4XX", "500", "5XX"],
+            is_error_status_code=lambda c: utils.match_status_codes(["4XX", "5XX"], c),
             retry_config=retry_config,
         )
 
@@ -633,7 +657,10 @@ class Que(BaseSDK):
 
 
         :param asset: A reference to a digital asset, either stored in S3 or accessible via URL. Files are streamed efficiently to temporary storage during processing to minimize memory usage.
-        :param mode: The signing mode to use. * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode. * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
+        :param mode: The signing mode to use.
+            * `server_measure`: The server streams the asset, calculates its hash, and embeds the manifest. Requires `manifest_json`. This is the primary signing mode.
+            * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
+
         :param manifest_json: JSON string containing the manifest to embed in the asset as a C2PA claim. This defines the provenance information and assertions about the asset. Required when `mode` is `server_measure`.
         :param cawg: Configuration to add a CAWG identity assertion during signing. Presence of this object enables CAWG.
         :param allow_insecure_remote_http: Whether to allow HTTP (non-HTTPS) URLs for remote manifest resources. Disabled by default for security.
@@ -678,6 +705,7 @@ class Que(BaseSDK):
             get_serialized_body=lambda: utils.serialize_request_body(
                 request, False, False, "json", models.SignRequest
             ),
+            allow_empty_value=None,
             timeout_ms=timeout_ms,
         )
 
@@ -694,13 +722,15 @@ class Que(BaseSDK):
                 config=self.sdk_configuration,
                 base_url=base_url or "",
                 operation_id="signAsset",
-                oauth2_scopes=[],
+                oauth2_scopes=None,
                 security_source=get_security_from_env(
                     self.sdk_configuration.security, models.Security
                 ),
+                tags=None,
+                extensions=None,
             ),
             request=req,
-            error_status_codes=["400", "401", "403", "422", "429", "4XX", "500", "5XX"],
+            is_error_status_code=lambda c: utils.match_status_codes(["4XX", "5XX"], c),
             retry_config=retry_config,
         )
 

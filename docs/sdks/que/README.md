@@ -37,9 +37,9 @@ Analyzes a digital asset to find, validate, and report on any embedded C2PA mani
 The asset is processed using memory-efficient streaming to temporary storage during verification. Returns detailed validation results including trust status, signer information, and any validation failures.
 
 
-### Example Usage
+### Example Usage: basic-verification
 
-<!-- UsageSnippet language="python" operationID="verifyAsset" method="post" path="/v1/verify" -->
+<!-- UsageSnippet language="python" operationID="verifyAsset" method="post" path="/v1/verify" example="basic-verification" -->
 ```python
 import os
 from que_media import Que
@@ -57,6 +57,29 @@ with Que(
         "max_output_size_bytes": 104857600,
         "max_stream_copy_bytes": 104857600,
         "stream_timeout_ms": 30000,
+    })
+
+    # Handle response
+    print(res)
+
+```
+### Example Usage: detailed-verification
+
+<!-- UsageSnippet language="python" operationID="verifyAsset" method="post" path="/v1/verify" example="detailed-verification" -->
+```python
+import os
+from que_media import Que
+
+
+with Que(
+    api_key_auth=os.getenv("QUE_API_KEY_AUTH", ""),
+) as que:
+
+    res = que.verify_asset(asset={
+        "bucket": "que-assets-dev",
+        "key": "uploads/document.pdf",
+    }, mode="detailed", allow_remote_manifests=True, allow_insecure_remote_http=False, include_certificates=True, limits={
+        "max_asset_size_bytes": 52428800,
     })
 
     # Handle response
@@ -97,9 +120,33 @@ Embeds a C2PA manifest into a digital asset and signs it using a server-side cry
 This operation cryptographically links the asset to its provenance information, creating an immutable record of the asset's origin, authorship, and any processing history.
 
 
-### Example Usage
+### Example Usage: advanced-signing
 
-<!-- UsageSnippet language="python" operationID="signAsset" method="post" path="/v1/sign" -->
+<!-- UsageSnippet language="python" operationID="signAsset" method="post" path="/v1/sign" example="advanced-signing" -->
+```python
+import os
+from que_media import Que, models
+
+
+with Que(
+    api_key_auth=os.getenv("QUE_API_KEY_AUTH", ""),
+) as que:
+
+    res = que.sign_asset(asset={
+        "bucket": "que-assets-dev",
+        "key": "uploads/document.pdf",
+    }, mode=models.Mode.SERVER_MEASURE, manifest_json="{\"title\":\"Signed Document\",\"assertions\":[{\"label\":\"stds.schema-org.CreativeWork\",\"data\":{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"author\":[{\"@type\":\"Person\",\"name\":\"John Author\"}]}}]}", allow_insecure_remote_http=False, limits={
+        "max_asset_size_bytes": 104857600,
+        "stream_timeout_ms": 60000,
+    })
+
+    # Handle response
+    print(res)
+
+```
+### Example Usage: basic-signing
+
+<!-- UsageSnippet language="python" operationID="signAsset" method="post" path="/v1/sign" example="basic-signing" -->
 ```python
 import os
 from que_media import Que, models

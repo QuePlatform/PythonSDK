@@ -1,5 +1,4 @@
 # AssetManagement
-(*asset_management*)
 
 ## Overview
 

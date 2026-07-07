@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 from enum import Enum
+from pydantic import Discriminator, Tag
 from que_media.types import BaseModel
+from que_media.utils import get_discriminator
 from typing import Union
-from typing_extensions import TypeAliasType, TypedDict
+from typing_extensions import Annotated, TypeAliasType, TypedDict
 
 
 class TypeLocal(str, Enum):
@@ -49,5 +51,11 @@ SignerRefDtoTypedDict = TypeAliasType(
 r"""Reference to credentials for signing."""
 
 
-SignerRefDto = TypeAliasType("SignerRefDto", Union[SignerRefDtoEnv, SignerRefDtoLocal])
+SignerRefDto = Annotated[
+    Union[
+        Annotated[SignerRefDtoEnv, Tag("env")],
+        Annotated[SignerRefDtoLocal, Tag("local")],
+    ],
+    Discriminator(lambda m: get_discriminator(m, "type", "type")),
+]
 r"""Reference to credentials for signing."""

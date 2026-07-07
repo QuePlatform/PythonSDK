@@ -5,6 +5,14 @@ The signing mode to use.
 * `client_hash`: The client provides the asset hash directly for offline signing. (Not yet implemented).
 
 
+## Example Usage
+
+```python
+from que_media.models import Mode
+
+value = Mode.SERVER_MEASURE
+```
+
 
 ## Values
 

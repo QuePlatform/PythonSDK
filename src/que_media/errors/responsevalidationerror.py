@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from que_media.errors import QueError
 
 
-@dataclass(frozen=True)
+@dataclass(unsafe_hash=True)
 class ResponseValidationError(QueError):
     """Error raised when there is a type mismatch between the response data and the expected Pydantic model."""
 

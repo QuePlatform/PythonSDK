@@ -2,6 +2,14 @@
 
 Algorithm used for the CAWG identity signature.
 
+## Example Usage
+
+```python
+from que_media.models import SigningAlg
+
+value = SigningAlg.ED25519
+```
+
 
 ## Values
 

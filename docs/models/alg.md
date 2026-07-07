@@ -2,6 +2,14 @@
 
 The cryptographic algorithm used for signing.
 
+## Example Usage
+
+```python
+from que_media.models import Alg
+
+value = Alg.ES256
+```
+
 
 ## Values
 

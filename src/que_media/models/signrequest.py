@@ -5,7 +5,8 @@ from .assetrefdto import AssetRefDto, AssetRefDtoTypedDict
 from .cawgidentitydto import CawgIdentityDto, CawgIdentityDtoTypedDict
 from .limitsdto import LimitsDto, LimitsDtoTypedDict
 from enum import Enum
-from que_media.types import BaseModel
+from pydantic import model_serializer
+from que_media.types import BaseModel, UNSET_SENTINEL
 from typing import Optional
 from typing_extensions import NotRequired, TypedDict
 
@@ -66,3 +67,21 @@ class SignRequest(BaseModel):
 
     limits: Optional[LimitsDto] = None
     r"""Optional limits for processing operations to prevent resource exhaustion. These limits apply to the streaming and processing phases of asset handling."""
+
+    @model_serializer(mode="wrap")
+    def serialize_model(self, handler):
+        optional_fields = set(
+            ["manifest_json", "cawg", "allow_insecure_remote_http", "limits"]
+        )
+        serialized = handler(self)
+        m = {}
+
+        for n, f in type(self).model_fields.items():
+            k = f.alias or n
+            val = serialized.get(k, serialized.get(n))
+
+            if val != UNSET_SENTINEL:
+                if val is not None or k not in optional_fields:
+                    m[k] = val
+
+        return m

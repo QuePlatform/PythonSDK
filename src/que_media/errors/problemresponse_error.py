@@ -11,19 +11,14 @@ from typing import Optional
 
 class ProblemResponseErrorData(BaseModel):
     type: str
-
     title: str
-
     status: int
-
     code: str
-
     detail: OptionalNullable[str] = UNSET
-
     details: OptionalNullable[models_problemresponse_error.Details] = UNSET
 
 
-@dataclass(frozen=True)
+@dataclass(unsafe_hash=True)
 class ProblemResponseError(QueError):
     r"""An RFC 7807 problem details response."""
 

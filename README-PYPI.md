@@ -106,7 +106,7 @@ It's also possible to write a standalone Python script without needing to set up
 ```python
 #!/usr/bin/env -S uv run --script
 # /// script
-# requires-python = ">=3.9"
+# requires-python = ">=3.10"
 # dependencies = [
 #     "que_media",
 # ]
@@ -167,6 +167,7 @@ with Que(
 </br>
 
 The same SDK client can also be used to make asynchronous requests by importing asyncio.
+
 ```python
 # Asynchronous Example
 import asyncio
@@ -239,16 +240,16 @@ with Que(
 <details open>
 <summary>Available methods</summary>
 
-### [asset_management](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/assetmanagement/README.md)
-
-* [get_presigned_url](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/assetmanagement/README.md#get_presigned_url) - Get an S3 presigned URL for secure uploads
-
 ### [Que SDK](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/que/README.md)
 
 * [verify_asset](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/que/README.md#verify_asset) - Verify the C2PA manifest of an asset
 * [sign_asset](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/que/README.md#sign_asset) - Sign an asset with a C2PA manifest
 
-### [utility](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/utility/README.md)
+### [AssetManagement](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/assetmanagement/README.md)
+
+* [get_presigned_url](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/assetmanagement/README.md#get_presigned_url) - Get an S3 presigned URL for secure uploads
+
+### [Utility](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/utility/README.md)
 
 * [get_health_check](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/utility/README.md#get_health_check) - Service Health Check
 * [get_trust_list](https://github.com/QuePlatform/PythonSDK/blob/master/docs/sdks/utility/README.md#get_trust_list) - Retrieve the current C2PA trust bundle
@@ -415,7 +416,8 @@ from que_media import Que
 
 
 with Que(
-    environment="<value>"
+    server_idx=0,
+    environment="dev-api",
     api_key_auth=os.getenv("QUE_API_KEY_AUTH", ""),
 ) as que:
 

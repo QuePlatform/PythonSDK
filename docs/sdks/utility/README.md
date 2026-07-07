@@ -1,5 +1,4 @@
 # Utility
-(*utility*)
 
 ## Overview
 
